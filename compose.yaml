@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=auvier_db'
+      - 'POSTGRES_PASSWORD=auvier_pass'
+      - 'POSTGRES_USER=auvier_user'
+    ports:
+      - "5432:5432"
