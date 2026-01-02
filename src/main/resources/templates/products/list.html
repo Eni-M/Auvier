@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{shared/_layout::layout('Products', ~{::div#content}, '/assets/css/admin.css', null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Products</h1>
+            <p class="v-muted">Manage products. Stock is handled via variants.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a th:href="@{/admin/products/new}" class="v-btn v-btn--primary">New Product</a>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <span>Products</span>
+    </nav>
+
+    <!-- Alerts -->
+    <div th:if="${error}" class="v-alert v-alert--danger">
+        <div class="v-alert__text" th:text="${error}"></div>
+        <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+    </div>
+
+    <div th:if="${success}" class="v-alert v-alert--success">
+        <div class="v-alert__text" th:text="${success}"></div>
+        <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+    </div>
+
+    <!-- Table -->
+    <div class="v-card">
+        <div class="v-card__header">
+            <div>
+                <h2 class="v-card__title">All products</h2>
+                <p class="v-card__subtitle"
+                   th:text="${products != null ? #lists.size(products) + ' total' : '0 total'}">0 total</p>
+            </div>
+        </div>
+
+        <div class="v-tablewrap">
+            <table class="v-table">
+                <thead>
+                <tr>
+                    <th style="width: 90px;">ID</th>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th style="width: 140px;">Status</th>
+                    <th style="width: 220px;">Category</th>
+                    <th style="width: 300px;" class="v-th-right">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${products == null or #lists.isEmpty(products)}">
+                    <td colspan="6" class="v-empty">
+                        <div class="v-empty__title">No products yet</div>
+                        <div class="v-empty__text">Create a product, then add variants to set stock.</div>
+                        <a th:href="@{/admin/products/new}" class="v-btn v-btn--primary">New Product</a>
+                    </td>
+                </tr>
+
+                <tr th:each="p : ${products}">
+                    <td class="v-mono" th:text="${p.id}">1</td>
+
+                    <td>
+                        <div class="v-strong" th:text="${p.name}">Black Hoodie</div>
+                    </td>
+
+                    <td class="v-mono" th:text="${p.slug}">black-hoodie</td>
+
+                    <td>
+            <span class="v-badge"
+                  th:classappend="${p.active} ? ' v-badge--ok' : ' v-badge--muted'"
+                  th:text="${p.active} ? 'Active' : 'Disabled'">Active</span>
+                    </td>
+
+                    <td th:text="${p.category != null ? p.category.name : '-'}">Hoodies</td>
+
+                    <td class="v-td-right">
+                        <div class="v-btngroup">
+                            <a th:href="@{/admin/products/{id}/view(id=${p.id})}"
+                               class="v-btn v-btn--ghost v-btn--sm">View</a>
+
+                            <a th:href="@{/admin/products/{id}/edit(id=${p.id})}"
+                               class="v-btn v-btn--ghost v-btn--sm">Edit</a>
+
+                            <a th:href="@{/admin/products/{id}/variants(id=${p.id})}"
+                               class="v-btn v-btn--primary v-btn--sm">Variants</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</html>
+

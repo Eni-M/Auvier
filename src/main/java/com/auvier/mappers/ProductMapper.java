@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Mapper(componentModel = "spring")
 public abstract class ProductMapper {
 
-    @Autowired
-    protected CategoryRepository categoryRepository;
+//    @Autowired
+//    protected CategoryRepository categoryRepository;
 
     @Mapping(target = "category", source = "categoryId", qualifiedByName = "idToCategory")
     public abstract ProductEntity toEntity(ProductDto dto);
@@ -25,9 +25,9 @@ public abstract class ProductMapper {
     @Mapping(target = "category", source = "categoryId", qualifiedByName = "idToCategory")
     public abstract void updateEntityFromDto(ProductDto dto, @MappingTarget ProductEntity entity);
 
-    @Named("idToCategory")
-    protected CategoryEntity idToCategory(Long id) {
-        return id == null ? null : categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + id));
-    }
+//    @Named("idToCategory")
+//    protected CategoryEntity idToCategory(Long id) {
+//        return id == null ? null : categoryRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Category not found: " + id));
+//    }
 }

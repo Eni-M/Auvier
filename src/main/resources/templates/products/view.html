@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{shared/_layout::layout('View Product', ~{::div#content}, '/assets/css/admin.css', null)}">
+
+<div id="content" class="v-admin" th:object="${product}">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1" th:text="*{name}">Product</h1>
+            <p class="v-muted">Preview product details and manage next actions.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/products}">Back</a>
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/products/{id}/edit(id=*{id})}">Edit</a>
+            <a class="v-btn v-btn--primary" th:href="@{/admin/products/{id}/variants(id=*{id})}">Variants</a>
+            <a class="v-btn v-btn--ghost" th:href="@{/product/{slug}(slug=*{slug})}" target="_blank">Public View</a>
+            <a class="v-btn v-btn--danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal">Delete</a>
+
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/products}">Products</a>
+        <span class="v-sep">/</span>
+        <span>View</span>
+    </nav>
+
+    <!-- Details -->
+    <div class="v-stack">
+        <div class="v-card">
+            <div class="v-card__header">
+                <div>
+                    <h2 class="v-card__title">Details</h2>
+                    <p class="v-card__subtitle">Core fields. Stock is managed in variants.</p>
+                </div>
+
+            </div>
+
+            <div class="v-card__body">
+                <th:block th:replace="~{shared/_helper :: rowHtml('Category', *{category != null ? category.name : '-'})}"></th:block>
+                <th:block th:replace="~{shared/_helper :: rowHtml('Slug', *{slug})}"></th:block>
+                <th:block th:replace="~{shared/_helper :: rowHtml('Status', *{active ? 'Active' : 'Disabled'})}"></th:block>
+                <th:block th:replace="~{shared/_helper :: rowHtml('Description', *{#strings.isEmpty(description) ? '-' : description})}"></th:block>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content v-modal">
+                <div class="modal-header v-modal__header">
+                    <div>
+                        <h5 class="v-modal__title">Confirm deletion</h5>
+                        <p class="v-modal__subtitle">This action cannot be undone.</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body v-modal__body">
+                    <div class="v-kv">
+                        <div class="v-kv__label">Product</div>
+                        <div class="v-kv__value v-strong" th:text="*{name}">Product Name</div>
+                    </div>
+
+                    <div class="v-kv">
+                        <div class="v-kv__label">ID</div>
+                        <div class="v-kv__value v-mono" th:text="*{id}">0</div>
+                    </div>
+
+                    <div class="v-modal__warning">
+                        Deleting removes this product permanently (and anything dependent on it).
+                    </div>
+                </div>
+
+                <div class="modal-footer v-modal__footer">
+                    <button type="button" class="v-btn v-btn--ghost" data-bs-dismiss="modal">Cancel</button>
+
+                    <form th:action="@{/admin/products/{id}/delete(id=*{id})}" method="post" class="m-0">
+                        <button type="submit" class="v-btn v-btn--danger">Delete Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</html>
+
+

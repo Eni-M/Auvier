@@ -18,12 +18,12 @@ public class ProductDto {
 
     private boolean active = true;
 
-    @NotNull(message = "Please select a category")
-    private CategoryDto category;
+//    @NotNull(message = "Please select a category")
+//    private CategoryDto category;
 
     //    private List<ProductImageEntity> images = new ArrayList<>();
-//
-//    private List<ProductVariantEntity> variants = new ArrayList<>();
+
+    //    private List<ProductVariantEntity> variants = new ArrayList<>();
 
     // If creating a simple product, you might include these:
     private Double price;
