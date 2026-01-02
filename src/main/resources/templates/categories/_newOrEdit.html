@@ -1,0 +1,104 @@
+<th:block th:fragment="newOrEditForm(action, userDto)">
+
+    <form method="post"
+          th:action="${action}"
+          th:object="${userDto}"
+          class="v-admin-form">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="v-card">
+            <div class="v-card__header">
+                <div>
+                    <h2 class="v-card__title"
+                        th:text="${userDto.id != null ? 'Edit User' : 'New User'}">
+                        User
+                    </h2>
+                    <p class="v-card__subtitle">
+                        Set account details and permissions.
+                    </p>
+                </div>
+            </div>
+
+            <div class="v-card__body">
+
+                <!-- FULL NAME -->
+                <div class="v-field">
+                    <label class="v-label">Full name</label>
+                    <div class="v-control">
+                        <input type="text"
+                               class="v-input"
+                               th:field="*{fullName}"
+                               required
+                               maxlength="50">
+                        <div class="v-error"
+                             th:if="${#fields.hasErrors('fullName')}"
+                             th:errors="*{fullName}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMAIL -->
+                <div class="v-field">
+                    <label class="v-label">Email</label>
+                    <div class="v-control">
+                        <input type="email"
+                               class="v-input"
+                               th:field="*{email}"
+                               required>
+                        <div class="v-error"
+                             th:if="${#fields.hasErrors('email')}"
+                             th:errors="*{email}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASSWORD (only on create) -->
+                <div class="v-field" th:if="${userDto.id == null}">
+                    <label class="v-label">Password</label>
+                    <div class="v-control">
+                        <input type="password"
+                               class="v-input"
+                               th:field="*{password}"
+                               required>
+                    </div>
+                </div>
+
+                <!-- ROLE -->
+                <div class="v-field">
+                    <label class="v-label">Role</label>
+                    <div class="v-control">
+                        <select class="v-input" th:field="*{role}">
+                            <option th:value="USER">USER</option>
+                            <option th:value="ADMIN">ADMIN</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ENABLED -->
+                <div class="v-field">
+                    <label class="v-label">Status</label>
+                    <div class="v-control">
+                        <label class="v-check">
+                            <input type="checkbox"
+                                   class="v-check__input"
+                                   th:field="*{enabled}">
+                            <span class="v-check__box"></span>
+                            <span class="v-check__text">Enabled</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="v-card__footer">
+                <div class="v-actions">
+                    <a class="v-btn v-btn--ghost" th:href="@{/admin/users}">Cancel</a>
+                    <button type="submit" class="v-btn v-btn--primary">Save</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</th:block>
