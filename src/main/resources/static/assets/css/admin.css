@@ -1,0 +1,383 @@
+/* Vantare Admin UI */
+.v-admin-form { max-width: 920px; }
+
+.v-card {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+}
+
+.v-card__header {
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.v-card__title {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 0.2px;
+}
+
+.v-card__subtitle {
+    margin: 6px 0 0;
+    opacity: 0.75;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.v-card__body { padding: 20px 24px; }
+.v-card__footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.12);
+}
+
+.v-field {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+}
+.v-field + .v-field { border-top: 1px dashed rgba(255,255,255,0.06); }
+
+.v-label {
+    font-size: 13px;
+    opacity: 0.85;
+    padding-top: 10px;
+}
+
+.v-control { min-width: 0; }
+
+.v-input {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.25);
+    color: inherit;
+    outline: none;
+    transition: border-color 140ms ease, transform 140ms ease;
+}
+.v-input:focus {
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-1px);
+}
+
+.v-help {
+    margin-top: 8px;
+    font-size: 12px;
+    opacity: 0.65;
+}
+
+.v-error {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ff6b6b;
+}
+
+.v-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    cursor: pointer;
+}
+.v-check__input { position: absolute; opacity: 0; pointer-events: none; }
+.v-check__box {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(0,0,0,0.25);
+    display: inline-block;
+    position: relative;
+}
+.v-check__input:checked + .v-check__box::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.85);
+}
+.v-check__text { font-size: 14px; opacity: 0.9; }
+
+.v-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.v-btn {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: transparent;
+    color: inherit;
+    padding: 10px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+.v-btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.22); }
+
+.v-btn--primary {
+    background: rgba(255,255,255,0.92);
+    color: #0b0b0b;
+    border-color: transparent;
+}
+.v-btn--primary:hover { background: rgba(255,255,255,0.98); }
+
+.v-btn--ghost {
+    background: rgba(255,255,255,0.06);
+}
+.v-btn--ghost:hover {
+    background: rgba(255,255,255,0.10);
+}
+
+@media (max-width: 820px) {
+    .v-field { grid-template-columns: 1fr; }
+    .v-label { padding-top: 0; }
+}
+.v-admin { padding: 22px 18px; max-width: 1100px; margin: 0 auto; }
+
+.v-pagehead {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.v-h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: 0.2px;
+}
+
+.v-muted { margin: 8px 0 0; opacity: 0.7; font-size: 14px; }
+
+.v-pagehead__actions { display: flex; gap: 10px; align-items: center; }
+
+.v-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    opacity: 0.8;
+    margin: 6px 0 18px;
+}
+.v-breadcrumb a { color: inherit; text-decoration: none; }
+.v-breadcrumb a:hover { text-decoration: underline; }
+.v-sep { opacity: 0.5; }
+
+.v-stack { display: grid; gap: 14px; }
+
+.v-tablewrap { overflow: auto; }
+.v-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.v-table thead th {
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0.35px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.v-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    vertical-align: middle;
+}
+.v-table tbody tr:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.v-th-right { text-align: right; }
+.v-td-right { text-align: right; }
+
+.v-btngroup { display: inline-flex; gap: 8px; }
+.v-btn--sm { padding: 8px 10px; border-radius: 10px; font-size: 13px; }
+
+.v-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+}
+.v-badge--ok { background: rgba(255,255,255,0.10); }
+.v-badge--muted { opacity: 0.65; }
+
+.v-strong { font-weight: 600; }
+.v-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 13px; }
+
+.v-empty {
+    text-align: center;
+    padding: 36px 16px;
+}
+.v-empty__title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.v-empty__text { opacity: 0.7; margin-bottom: 14px; }
+
+.v-alert {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+.v-alert__text { font-size: 14px; opacity: 0.9; }
+.v-alert__close {
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0.7;
+}
+.v-alert__close:hover { opacity: 1; }
+.v-alert--success { border-color: rgba(50,205,50,0.25); }
+.v-alert--danger { border-color: rgba(255,107,107,0.28); }
+
+/* Key–Value rows (View pages) */
+.v-kv {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 14px;
+    padding: 12px 0;
+}
+
+.v-kv + .v-kv {
+    border-top: 1px dashed rgba(255,255,255,0.06);
+}
+
+.v-kv__label {
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    opacity: 0.65;
+    padding-top: 2px;
+}
+
+.v-kv__value {
+    font-size: 14px;
+    opacity: 0.95;
+    word-break: break-word;
+}
+
+@media (max-width: 820px) {
+    .v-kv {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+}
+
+.v-textarea { resize: vertical; min-height: 120px; }
+.v-select { appearance: none; }
+
+.v-btn--danger{
+    background: rgba(255, 82, 82, 0.14);
+    border-color: rgba(255, 82, 82, 0.26);
+}
+.v-btn--danger:hover{
+    background: rgba(255, 82, 82, 0.20);
+    border-color: rgba(255, 82, 82, 0.34);
+}
+.v-check { position: relative; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+
+.v-check__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.v-check__box {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.22);
+    background: rgba(0,0,0,0.25);
+    display: inline-block;
+    position: relative;
+}
+
+/* IMPORTANT: use ~ instead of + */
+.v-check__input:checked ~ .v-check__box {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.40);
+}
+
+.v-check__input:checked ~ .v-check__box::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 4px;
+    height: 8px;
+    border: 2px solid rgba(255,255,255,0.95);
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(45deg);
+}
+/* Modal styling (Bootstrap modal, Vantare skin) */
+.v-modal.modal-content{
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(12,12,14,0.96);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+}
+
+.v-modal__header{
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 16px 18px;
+}
+
+.v-modal__title{
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.v-modal__subtitle{
+    margin: 6px 0 0;
+    opacity: 0.7;
+    font-size: 13px;
+}
+
+.v-modal__body{
+    padding: 16px 18px;
+}
+
+.v-modal__footer{
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 18px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.v-modal__warning{
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,82,82,0.10);
+    border: 1px solid rgba(255,82,82,0.20);
+    opacity: 0.9;
+    font-size: 13px;
+}
+
+

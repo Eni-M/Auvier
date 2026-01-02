@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{shared/_layout :: layout(~{::title}, ~{::section}, ~{::styles}, ~{::scripts})}">
+<head>
+    <title>Auvier Admin</title>
+
+    <th:block th:fragment="styles"></th:block>
+</head>
+<body>
+
+<section>
+    <div class="page-header">
+        <h1 class="page-title">Admin</h1>
+        <p class="page-subtitle">Auvier Atlas</p>
+    </div>
+
+    <div class="grid grid-2">
+        <a class="card card-link" th:href="@{/admin/categories}">
+            <div class="card-body">
+                <h2 class="card-title">Categories</h2>
+                <p class="card-text">View and manage categories</p>
+            </div>
+        </a>
+
+        <a class="card card-link" th:href="@{/admin/products}">
+            <div class="card-body">
+                <h2 class="card-title">Products</h2>
+                <p class="card-text">View and manage products</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<th:block th:fragment="scripts"></th:block>
+</body>
+</html>
+
+
