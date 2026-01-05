@@ -81,7 +81,9 @@
                   th:text="${p.active} ? 'Active' : 'Disabled'">Active</span>
                     </td>
 
-                    <td th:text="${p.category != null ? p.category.name : '-'}">Hoodies</td>
+                    <!-- TODO: Uncomment when Category is implemented -->
+                    <!-- <td th:text="${p.category != null ? p.category.name : '-'}">Hoodies</td> -->
+                    <td>-</td>
 
                     <td class="v-td-right">
                         <div class="v-btngroup">

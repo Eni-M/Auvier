@@ -5,24 +5,26 @@ import com.auvier.entities.catalog.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public abstract class ProductMapper {
+public abstract class ProductMapper implements BaseMapper<ProductDto, ProductEntity> {
 
 //    @Autowired
 //    protected CategoryRepository categoryRepository;
 
-    @Mapping(target = "category", source = "categoryId", qualifiedByName = "idToCategory")
+    // TODO: Uncomment when Category is implemented
+    // @Mapping(target = "category", source = "categoryId", qualifiedByName = "idToCategory")
     public abstract ProductEntity toEntity(ProductDto dto);
 
-    @Mapping(target = "categoryId", source = "category.id")
+    // TODO: Uncomment when Category is implemented
+    // @Mapping(target = "categoryId", source = "category.id")
     public abstract ProductDto toDto(ProductEntity entity);
 
     // CRITICAL: This updates an existing entity without creating a new one
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "category", source = "categoryId", qualifiedByName = "idToCategory")
+    @Mapping(target = "createdAt", ignore = true)
+    // TODO: Uncomment when Category is implemented
+    // @Mapping(target = "category", source = "categoryId", qualifiedByName = "idToCategory")
     public abstract void updateEntityFromDto(ProductDto dto, @MappingTarget ProductEntity entity);
 
 //    @Named("idToCategory")

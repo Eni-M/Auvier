@@ -42,7 +42,8 @@
             </div>
 
             <div class="v-card__body">
-                <th:block th:replace="~{shared/_helper :: rowHtml('Category', *{category != null ? category.name : '-'})}"></th:block>
+                <!-- TODO: Uncomment when Category is implemented -->
+                <!-- <th:block th:replace="~{shared/_helper :: rowHtml('Category', *{category != null ? category.name : '-'})}"></th:block> -->
                 <th:block th:replace="~{shared/_helper :: rowHtml('Slug', *{slug})}"></th:block>
                 <th:block th:replace="~{shared/_helper :: rowHtml('Status', *{active ? 'Active' : 'Disabled'})}"></th:block>
                 <th:block th:replace="~{shared/_helper :: rowHtml('Description', *{#strings.isEmpty(description) ? '-' : description})}"></th:block>

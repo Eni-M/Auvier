@@ -64,6 +64,11 @@ a:hover { text-decoration: underline; }
     gap: 10px;
     text-decoration: none;
     color: inherit;
+    transition: opacity 250ms ease;
+}
+.v-brand:hover {
+    text-decoration: none;
+    opacity: 0.85;
 }
 .v-brand__mark {
     width: 30px;
@@ -74,6 +79,11 @@ a:hover { text-decoration: underline; }
     border: 1px solid rgba(255,255,255,0.14);
     background: rgba(255,255,255,0.06);
     font-weight: 700;
+    transition: background 250ms ease, border-color 250ms ease;
+}
+.v-brand:hover .v-brand__mark {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.20);
 }
 .v-brand__text { font-weight: 700; letter-spacing: 0.2px; }
 
@@ -85,11 +95,14 @@ a:hover { text-decoration: underline; }
     padding: 8px 10px;
     border-radius: 10px;
     border: 1px solid transparent;
+    transition: opacity 250ms ease, background 250ms ease, border-color 250ms ease, transform 200ms ease;
 }
 .v-topnav__link:hover {
+    text-decoration: none;
     opacity: 1;
     background: rgba(255,255,255,0.06);
     border-color: rgba(255,255,255,0.10);
+    transform: translateY(-1px);
 }
 
 /* Main */

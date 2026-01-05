@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    private final CategoryService categoryService;
+
+    // TODO: Uncomment when CategoryService is implemented
+    // private final CategoryService categoryService;
 
     // This runs before every GetMapping/PostMapping
-    @ModelAttribute("categories")
-    public List<CategoryDto> populateCategories() {
-        return categoryService.findAll();
-    }
+    // TODO: Uncomment when CategoryService is implemented
+    // @ModelAttribute("categories")
+    // public List<CategoryDto> populateCategories() {
+    //     return categoryService.findAll();
+    // }
 
     @GetMapping
     public String list(Model model) {
@@ -44,6 +47,18 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 
+    @GetMapping("/{id}/view")
+    public String view(@PathVariable Long id, Model model) {
+        model.addAttribute("product", productService.findOne(id));
+        return "products/view";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editForm(@PathVariable Long id, Model model) {
+        model.addAttribute("productDto", productService.findOne(id));
+        return "products/edit";
+    }
+
     @PostMapping("/{id}/edit")
     public String update(@PathVariable Long id,
                          @Valid @ModelAttribute("productDto") ProductDto productDto,
@@ -51,6 +66,12 @@ public class ProductController {
         if (bindingResult.hasErrors()) return "products/edit";
 
         productService.modify(id, productDto);
+        return "redirect:/admin/products";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        productService.remove(id);
         return "redirect:/admin/products";
     }
 }

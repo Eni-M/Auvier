@@ -3,8 +3,8 @@ package com.auvier.infrastructure.services.impl;
 
 import com.auvier.dtos.ProductDto;
 import com.auvier.entities.catalog.ProductEntity;
-import com.auvier.exceptions.ProductConflictException;
-import com.auvier.exceptions.ProductNotFoundException;
+import com.auvier.exception.DuplicateResourceException;
+import com.auvier.exception.ResourceNotFoundException;
 import com.auvier.infrastructure.services.ProductService;
 import com.auvier.mappers.ProductMapper;
 import com.auvier.repositories.ProductRepository;
@@ -24,27 +24,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto add(ProductDto dto) {
         if (repository.existsBySlug(dto.getSlug())) {
-            throw new ProductConflictException("Slug already exists!");
+            throw new DuplicateResourceException("Product with slug '" + dto.getSlug() + "' already exists");
         }
 
         ProductEntity entity = mapper.toEntity(dto);
-
-        // Set the creator once. Because updatable = false, this stays forever.
-        entity.setCreatedBy("admin_user");
-
         return mapper.toDto(repository.save(entity));
     }
 
     @Override
     public ProductDto modify(Long id, ProductDto dto) {
         ProductEntity existing = repository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         // Update fields from DTO to Entity
         mapper.updateEntityFromDto(dto, existing);
-
-        // Set the editor. Because insertable = false, this only works on updates.
-        existing.setUpdatedBy("admin_user");
 
         return mapper.toDto(repository.save(existing));
     }
@@ -52,11 +45,31 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void remove(Long id) {
         if (!repository.existsById(id)) {
-            throw new ProductNotFoundException("Product with id: " + id + " not found");
+            throw new ResourceNotFoundException("Product", id);
         }
         repository.deleteById(id);
     }
 
-    // ... findOne and findProductbyName stay similar but use mapper
+    @Override
+    public ProductDto findOne(Long id) {
+        ProductEntity entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
+        return mapper.toDto(entity);
+    }
+
+    @Override
+    public List<ProductDto> findAll() {
+        return repository.findAll()
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public ProductDto findProductbyName(String name) {
+        ProductEntity entity = repository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with name: " + name + " not found"));
+        return mapper.toDto(entity);
+    }
 }
 

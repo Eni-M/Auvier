@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{shared/_layout::layout('Server Error', ~{::div#content}, '/assets/css/admin.css', null)}">
+<head>
+    <title>Server Error</title>
+</head>
+<body>
+<div id="content">
+    <div class="error-container">
+        <div class="error-icon">
+            <i class="bi bi-exclamation-octagon"></i>
+        </div>
+        <div class="error-status" th:text="${status}">500</div>
+        <div class="error-title" th:text="${error}">Internal Server Error</div>
+        <div class="error-message" th:text="${message}">Something went wrong on our end. Please try again later.</div>
+        <div class="error-trace" th:if="${traceId}">
+            <span>Trace ID: </span><code th:text="${traceId}"></code>
+        </div>
+        <div class="error-actions">
+            <a th:href="@{/admin}" class="v-btn v-btn--primary"><i class="bi bi-house"></i> Dashboard</a>
+            <a href="javascript:location.reload()" class="v-btn v-btn--ghost"><i class="bi bi-arrow-clockwise"></i> Retry</a>
+        </div>
+    </div>
+
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+        .error-status {
+            font-size: 5rem;
+            font-weight: bold;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0.5rem;
+        }
+        .error-title {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+        }
+        .error-trace {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 2rem;
+        }
+        .error-trace code {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .error-actions {
+            display: flex;
+            gap: 12px;
+        }
+    </style>
+</div>
+</body>
+</html>
+
