@@ -2,7 +2,7 @@
 <html lang="en" th:fragment="layout(title, content, styles, scripts)">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${title}">Vantare</title>
+    <title th:text="${title}">Auvier</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap + Icons -->
@@ -28,11 +28,12 @@
 <header class="v-topbar">
     <div class="v-topbar__inner">
         <a class="v-brand" th:href="@{/}">
-            <span class="v-brand__mark">V</span>
-            <span class="v-brand__text">Vantare</span>
+            <span class="v-brand__mark">A</span>
+            <span class="v-brand__text">Auvier</span>
         </a>
 
         <nav class="v-topnav">
+            <a class="v-topnav__link" th:href="@{/admin}">Dashboard</a>
             <a class="v-topnav__link" th:href="@{/admin/categories}">Categories</a>
             <a class="v-topnav__link" th:href="@{/admin/products}">Products</a>
         </nav>
@@ -47,7 +48,7 @@
 <!-- Footer -->
 <footer class="v-footer">
     <div class="v-footer__inner">
-        <span>© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> Vantare</span>
+        <span>© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> Auvier</span>
         <span class="v-footer__dot">•</span>
         <span class="v-footer__muted">House of Advancement</span>
     </div>
