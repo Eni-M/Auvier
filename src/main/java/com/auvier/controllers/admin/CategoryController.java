@@ -31,10 +31,7 @@ public class CategoryController {
     @PostMapping("/new")
     public String create(@Valid @ModelAttribute("categoryDto") CategoryDto categoryDto,
                          BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return "categories/new";
-        }
+        if (bindingResult.hasErrors()) return "categories/new";
 
         categoryService.add(categoryDto);
         return "redirect:/admin/categories";
@@ -50,10 +47,7 @@ public class CategoryController {
     public String update(@PathVariable Long id,
                          @Valid @ModelAttribute("categoryDto") CategoryDto categoryDto,
                          BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return "categories/edit";
-        }
+        if (bindingResult.hasErrors()) return "categories/edit";
 
         categoryService.modify(id, categoryDto);
         return "redirect:/admin/categories";
@@ -70,5 +64,4 @@ public class CategoryController {
         model.addAttribute("category", categoryService.findOne(id));
         return "categories/view";
     }
-
 }
