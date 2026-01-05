@@ -7,7 +7,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public abstract class CategoryMapper {
+public interface CategoryMapper extends BaseMapper<CategoryDto, CategoryEntity> {
 
     public abstract CategoryEntity toEntity(CategoryDto dto);
 
