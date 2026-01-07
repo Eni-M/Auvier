@@ -1,5 +1,4 @@
-package com.auvier.controllers;
-
+package com.auvier.controllers.admin;
 
 import com.auvier.dtos.ProductVariantDto;
 import com.auvier.enums.Size;
@@ -14,28 +13,32 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/products")
 public class ProductVariantAdminController {
 
     private final ProductService productService;
     private final ProductVariantService productVariantService;
 
-    @GetMapping("/products/{productId}/variants")
+    // LIST: /admin/products/{productId}/variants
+    @GetMapping("/{productId}/variants")
     public String list(@PathVariable Long productId, Model model) {
         model.addAttribute("product", productService.findOne(productId));
         model.addAttribute("variants", productVariantService.findAllByProductId(productId));
         return "variants/list";
     }
 
-    @GetMapping("/products/{productId}/variants/new")
+    // CREATE FORM: /admin/products/{productId}/variants/new
+    @GetMapping("/{productId}/variants/new")
     public String createForm(@PathVariable Long productId, Model model) {
         model.addAttribute("product", productService.findOne(productId));
-        model.addAttribute("productVariantDto", new ProductVariantDto(null, productId, "", null, 0, "", null, true));
+        model.addAttribute("productVariantDto",
+                new ProductVariantDto(null, productId, "", null, 0, "", null, true));
         model.addAttribute("sizes", Size.values());
         return "variants/new";
     }
 
-    @PostMapping("/products/{productId}/variants/new")
+    // CREATE POST: /admin/products/{productId}/variants/new
+    @PostMapping("/{productId}/variants/new")
     public String create(@PathVariable Long productId,
                          @Valid @ModelAttribute("productVariantDto") ProductVariantDto dto,
                          BindingResult br,
@@ -50,6 +53,7 @@ public class ProductVariantAdminController {
         return "redirect:/admin/products/" + productId + "/variants";
     }
 
+    // EDIT FORM: /admin/products/variants/{id}/edit
     @GetMapping("/variants/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
         ProductVariantDto dto = productVariantService.findOne(id);
@@ -59,6 +63,7 @@ public class ProductVariantAdminController {
         return "variants/edit";
     }
 
+    // EDIT POST: /admin/products/variants/{id}/edit
     @PostMapping("/variants/{id}/edit")
     public String edit(@PathVariable Long id,
                        @Valid @ModelAttribute("productVariantDto") ProductVariantDto dto,
@@ -72,11 +77,12 @@ public class ProductVariantAdminController {
             return "variants/edit";
         }
 
-        dto.setProductId(existing.getProductId()); // prevent changing product relation via form
+        dto.setProductId(existing.getProductId()); // lock relation
         productVariantService.modify(id, dto);
         return "redirect:/admin/products/" + existing.getProductId() + "/variants";
     }
 
+    // DELETE: /admin/products/variants/{id}/delete
     @PostMapping("/variants/{id}/delete")
     public String delete(@PathVariable Long id) {
         ProductVariantDto existing = productVariantService.findOne(id);

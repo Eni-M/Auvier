@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface ProductVariantService extends CrudService<ProductVariantDto, Long> {
     ProductVariantDto findOne(Long id);
     List<ProductVariantDto> findAllByProductId(Long productId);

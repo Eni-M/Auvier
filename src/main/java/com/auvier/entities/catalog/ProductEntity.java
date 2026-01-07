@@ -6,10 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
-@Table(name = "products")
-@Getter @Setter @NoArgsConstructor
+@Entity(name = "products")
+@Getter
+@Setter
+@NoArgsConstructor
 public class ProductEntity {
 
     @Id
@@ -28,13 +31,18 @@ public class ProductEntity {
     private boolean active = true;
 
     // Connects to Category
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "category_id")
-//     private CategoryEntity category;
-//
-//    // Connects to Variants (Price, SKU, Stock live here)
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<ProductVariantEntity> variants = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_category_id")
+    private CategoryEntity subCategory;
+
+
+    // Connects to Variants (Price, SKU, Stock live here)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductVariantEntity> variants = new ArrayList<>();
 
     // Auditing
     @Column(nullable = false, updatable = false)

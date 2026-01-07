@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{shared/_layout::layout('Edit Category', ~{::div#content}, '/assets/css/admin.css', null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Edit Category</h1>
+            <p class="v-muted">Update details and visibility.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/categories}">Back</a>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/categories}">Categories</a>
+        <span class="v-sep">/</span>
+        <span>Edit</span>
+    </nav>
+
+    <!-- Content -->
+    <div class="v-stack">
+        <th:block
+                th:replace="~{categories/_newOrEdit :: newOrEditForm(@{/admin/categories/{id}/edit(id=${categoryDto.id})}, ${categoryDto})}">
+        </th:block>
+    </div>
+
+</div>
+</html>
+

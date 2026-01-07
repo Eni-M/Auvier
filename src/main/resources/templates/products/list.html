@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       th:replace="~{shared/_layout::layout('Products', ~{::div#content}, '/assets/css/admin.css', null)}">
 
 <div id="content" class="v-admin">
@@ -53,13 +54,14 @@
                     <th>Slug</th>
                     <th style="width: 140px;">Status</th>
                     <th style="width: 220px;">Category</th>
+                    <th style="width: 220px;">Subcategory</th>
                     <th style="width: 300px;" class="v-th-right">Actions</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <tr th:if="${products == null or #lists.isEmpty(products)}">
-                    <td colspan="6" class="v-empty">
+                    <td colspan="7" class="v-empty">
                         <div class="v-empty__title">No products yet</div>
                         <div class="v-empty__text">Create a product, then add variants to set stock.</div>
                         <a th:href="@{/admin/products/new}" class="v-btn v-btn--primary">New Product</a>
@@ -76,14 +78,16 @@
                     <td class="v-mono" th:text="${p.slug}">black-hoodie</td>
 
                     <td>
-            <span class="v-badge"
-                  th:classappend="${p.active} ? ' v-badge--ok' : ' v-badge--muted'"
-                  th:text="${p.active} ? 'Active' : 'Disabled'">Active</span>
+        <span class="v-badge"
+              th:classappend="${p != null && p.active} ? ' v-badge--ok' : ' v-badge--muted'"
+              th:text="${p != null && p.active} ? 'Active' : 'Disabled'">Active</span>
                     </td>
 
-                    <!-- TODO: Uncomment when Category is implemented -->
-                    <!-- <td th:text="${p.category != null ? p.category.name : '-'}">Hoodies</td> -->
-                    <td>-</td>
+                    <!-- Category name, fully null safe -->
+                    <td th:text="${p != null && p.category != null ? p.category.name : '-'}">Hoodies</td>
+
+                    <!-- Subcategory name, fully null safe -->
+                    <td th:text="${p != null && p.subCategory != null ? p.subCategory.name : '-'}">Winter Hoodies</td>
 
                     <td class="v-td-right">
                         <div class="v-btngroup">
@@ -93,7 +97,7 @@
                             <a th:href="@{/admin/products/{id}/edit(id=${p.id})}"
                                class="v-btn v-btn--ghost v-btn--sm">Edit</a>
 
-                            <a th:href="@{/admin/products/{id}/variants(id=${p.id})}"
+                            <a th:href="@{/admin/products/{productId}/variants(productId=${p.id})}"
                                class="v-btn v-btn--primary v-btn--sm">Variants</a>
                         </div>
                     </td>
@@ -105,4 +109,3 @@
 
 </div>
 </html>
-

@@ -1,6 +1,11 @@
-<th:block th:fragment="newOrEditForm(action, productDto)">
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="newOrEditForm(action, productDto)">
 
-    <form method="post" th:action="${action}" th:object="${productDto}" class="v-admin-form">
+    <form method="post"
+          th:action="${action}"
+          th:object="${productDto}"
+          class="v-admin-form">
+
         <input type="hidden" th:field="*{id}"/>
 
         <div class="v-card">
@@ -8,7 +13,9 @@
                 <div>
                     <h2 class="v-card__title"
                         th:text="*{id} != null ? 'Edit Product' : 'New Product'">Product</h2>
-                    <p class="v-card__subtitle">Core product info. Variants and stock are managed separately.</p>
+                    <p class="v-card__subtitle">
+                        Core product info. Variants and stock are managed separately.
+                    </p>
                 </div>
             </div>
 
@@ -19,10 +26,13 @@
                     <label class="v-label" for="name">Name</label>
                     <div class="v-control">
                         <input id="name" type="text" class="v-input"
-                               th:field="*{name}" maxlength="120" required
+                               th:field="*{name}"
+                               maxlength="120" required
                                placeholder="e.g. Black Hoodie">
                         <div class="v-help">Customer-facing product title.</div>
-                        <div class="v-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        <div class="v-error"
+                             th:if="${#fields.hasErrors('name')}"
+                             th:errors="*{name}"></div>
                     </div>
                 </div>
 
@@ -31,10 +41,13 @@
                     <label class="v-label" for="slug">Slug</label>
                     <div class="v-control">
                         <input id="slug" type="text" class="v-input"
-                               th:field="*{slug}" maxlength="140" required
+                               th:field="*{slug}"
+                               maxlength="140" required
                                placeholder="e.g. black-hoodie">
                         <div class="v-help">Used in URLs. Lowercase, hyphens only.</div>
-                        <div class="v-error" th:if="${#fields.hasErrors('slug')}" th:errors="*{slug}"></div>
+                        <div class="v-error"
+                             th:if="${#fields.hasErrors('slug')}"
+                             th:errors="*{slug}"></div>
                     </div>
                 </div>
 
@@ -42,45 +55,77 @@
                 <div class="v-field">
                     <label class="v-label" for="description">Description</label>
                     <div class="v-control">
-            <textarea id="description" class="v-input v-textarea"
-                      th:field="*{description}" rows="5" maxlength="4000"
-                      placeholder="Describe materials, fit, details..."></textarea>
+                        <textarea id="description"
+                                  class="v-input v-textarea"
+                                  th:field="*{description}"
+                                  rows="5" maxlength="4000"
+                                  placeholder="Describe materials, fit, details..."></textarea>
                         <div class="v-help">Optional, but helps SEO and conversions.</div>
-                        <div class="v-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                        <div class="v-error"
+                             th:if="${#fields.hasErrors('description')}"
+                             th:errors="*{description}"></div>
                     </div>
                 </div>
 
-                <!-- CATEGORY -->
-                <!-- TODO: Uncomment when Category feature is implemented -->
-                <!--
-                <div class="v-field" th:if="${categories != null}">
-                    <label class="v-label" for="categoryId">Category</label>
+                <!-- MAIN CATEGORY (Required) -->
+                <div class="v-field">
+                    <label class="v-label" for="category">
+                        Main Category <span style="color: red;">*</span>
+                    </label>
                     <div class="v-control">
-                        <select id="categoryId" class="v-input v-select" th:field="*{categoryId}" required>
-                            <option value="" disabled>Select category</option>
+                        <select id="category" class="v-input v-select" th:field="*{category.id}" required>
+                            <option value="">Select category</option>
                             <option th:each="c : ${categories}"
                                     th:value="${c.id}"
                                     th:text="${c.name}">
                             </option>
                         </select>
 
-                        <div class="v-help">Controls where the product appears.</div>
-                        <div class="v-error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
+                        <div class="v-help">
+                            The primary category for this product (e.g., Clothing).
+                        </div>
+                        <div class="v-error"
+                             th:if="${#fields.hasErrors('categoryId')}"
+                             th:errors="*{categoryId}"></div>
                     </div>
                 </div>
-                -->
+
+                <!-- SUB CATEGORY (Optional) -->
+                <div class="v-field">
+                    <label class="v-label" for="subCategory">Sub Category</label>
+                    <div class="v-control">
+                        <!-- for now reuse the same categories list -->
+                        <select id="subCategory" class="v-input v-select" th:field="*{subCategory.id}">
+                            <option value="">Select sub category (optional)</option>
+                            <option th:each="c : ${subCategories}"
+                                    th:value="${c.id}"
+                                    th:text="${c.name}">
+                            </option>
+                        </select>
+
+                        <div class="v-help">
+                            Optional sub category (e.g., Winter Collection).
+                        </div>
+                        <div class="v-error"
+                             th:if="${#fields.hasErrors('subCategoryId')}"
+                             th:errors="*{subCategoryId}"></div>
+                    </div>
+                </div>
 
                 <!-- ACTIVE -->
                 <div class="v-field">
                     <label class="v-label">Visibility</label>
                     <div class="v-control">
                         <label class="v-check">
-                            <input type="checkbox" class="v-check__input" th:field="*{active}">
+                            <input type="checkbox"
+                                   class="v-check__input"
+                                   th:field="*{active}">
                             <span class="v-check__box"></span>
                             <span class="v-check__text">Active (visible in store)</span>
                         </label>
-
-                        <div class="v-help">Disable to hide this product from customers.</div>
+                        <div class="v-help">
+                            Disable to hide this product from customers.
+                        </div>
                     </div>
                 </div>
 
@@ -96,5 +141,4 @@
 
     </form>
 
-</th:block>
-
+</div>
