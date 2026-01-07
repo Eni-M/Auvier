@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/variants")
 public class ProductVariantAdminController {
 
     private final ProductService productService;
