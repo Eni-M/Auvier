@@ -1,6 +1,8 @@
 package com.auvier.controllers.admin;
 
+import com.auvier.dtos.CategoryDto;
 import com.auvier.dtos.ProductDto;
+import com.auvier.infrastructure.services.CategoryService;
 import com.auvier.infrastructure.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller

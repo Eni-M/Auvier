@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{shared/_layout::layout('View User', ~{::div#content}, '/assets/css/admin.css', null)}">
+<body>
+
+<div id="content" class="v-admin" th:object="${user}">
+
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1" th:text="(*{fullName})">User</h1>
+            <p class="v-muted">User details.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/users}">Back</a>
+            <a class="v-btn v-btn--primary"
+               th:href="@{/admin/users/{id}/edit(id=(*{id}))}">Edit</a>
+        </div>
+    </div>
+
+    <div class="v-card">
+        <div class="v-card__body">
+            <th:block th:replace="~{shared/_helper :: rowHtml('ID', (*{id}))}"/>
+            <th:block th:replace="~{shared/_helper :: rowHtml('Email', (*{email}))}"/>
+            <th:block th:replace="~{shared/_helper :: rowHtml('Role', (*{role}))}"/>
+            <th:block th:replace="~{shared/_helper :: rowHtml('Status', (*{enabled} ? 'Enabled' : 'Disabled'))}"/>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
