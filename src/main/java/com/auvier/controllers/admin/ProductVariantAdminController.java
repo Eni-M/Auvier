@@ -1,4 +1,4 @@
-package com.auvier.controllers;
+package com.auvier.controllers.admin;
 
 
 import com.auvier.dtos.ProductVariantDto;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/variants")
+@RequestMapping("/admin/products")
 public class ProductVariantAdminController {
 
     private final ProductService productService;
@@ -26,6 +26,7 @@ public class ProductVariantAdminController {
         model.addAttribute("variants", productVariantService.findAllByProductId(productId));
         return "variants/list";
     }
+
 
     @GetMapping("/products/{productId}/variants/new")
     public String createForm(@PathVariable Long productId, Model model) {

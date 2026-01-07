@@ -8,8 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
-
-    // Spring generates the SQL for this automatically based on the name!
     boolean existsBySlug(String slug);
 
     Optional<ProductEntity> findByName(String name);

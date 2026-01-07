@@ -37,14 +37,4 @@ public class ProductVariantDto {
     private Size size;
 
     private boolean active = true;
-
-    // Explicit getters for IDE/template analyzers (Lombok generates these at compile time)
-    public Long getId() { return id; }
-    public Long getProductId() { return productId; }
-    public String getSku() { return sku; }
-    public BigDecimal getPrice() { return price; }
-    public Integer getStock() { return stock; }
-    public String getColor() { return color; }
-    public Size getSize() { return size; }
-    public boolean isActive() { return active; }
 }
