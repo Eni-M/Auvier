@@ -23,16 +23,12 @@ public class CategoryDto {
     @Size(max = 25, message = "Slug must be under 25 characters")
     private String slug;
 
-    // null means it's a root category (ex: "Men")
+    // null means root category
     private Long parentId;
-
-    private Long categoryId;
 
     private boolean active = true;
 
-    // description field added to match mapper
     @Size(max = 1000, message = "Description must be under 1000 characters")
     private String description;
-
-
 }
+

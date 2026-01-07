@@ -18,8 +18,9 @@ public interface  ProductVariantRepository extends JpaRepository<ProductVariantE
     List<ProductVariantEntity> findByProductIdOrderByIdAsc(Long productId);
     boolean existsBySku(String sku);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select v from ProductVariantEntity v where v.id = :id")
-    Optional<ProductVariantEntity> findByIdForUpdate(@Param("id") Long id);
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Query("select v from ProductVariantEntity v where v.id = :id")
+//    Optional<ProductVariantEntity> findByIdForUpdate(@Param("id") Long id);
+
 }
 

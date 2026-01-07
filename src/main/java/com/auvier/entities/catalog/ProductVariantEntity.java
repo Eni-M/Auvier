@@ -6,12 +6,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+@Entity(name = "product_variants")
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "product_variants")
 public class ProductVariantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

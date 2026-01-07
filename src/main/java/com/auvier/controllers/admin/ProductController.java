@@ -19,16 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    // TODO: Uncomment when CategoryService is implemented
-    // private final CategoryService categoryService;
-
-    // This runs before every GetMapping/PostMapping
-    // TODO: Uncomment when CategoryService is implemented
-    // @ModelAttribute("categories")
-    // public List<CategoryDto> populateCategories() {
-    //     return categoryService.findAll();
-    // }
+    @ModelAttribute("categories")
+    public List<CategoryDto> populateCategories() {
+       return categoryService.findAll();
+    }
 
     @GetMapping
     public String list(Model model) {

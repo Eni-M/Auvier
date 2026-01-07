@@ -1,33 +1,96 @@
 <!DOCTYPE html>
 <html lang="en"
-      th:replace="~{shared/_layout::layout('View User', ~{::div#content}, '/assets/css/admin.css', null)}">
-<body>
+      th:replace="~{shared/_layout::layout('View Category', ~{::div#content}, '/assets/css/admin.css', null)}">
 
-<div id="content" class="v-admin" th:object="${user}">
+<div id="content" class="v-admin" th:object="${category}">
 
     <div class="v-pagehead">
         <div>
-            <h1 class="v-h1" th:text="(*{fullName})">User</h1>
-            <p class="v-muted">User details.</p>
+            <h1 class="v-h1" th:text="*{name}">Category</h1>
+            <p class="v-muted">Category details and actions.</p>
         </div>
 
         <div class="v-pagehead__actions">
-            <a class="v-btn v-btn--ghost" th:href="@{/admin/users}">Back</a>
-            <a class="v-btn v-btn--primary"
-               th:href="@{/admin/users/{id}/edit(id=(*{id}))}">Edit</a>
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/categories}">Back</a>
+            <a class="v-btn v-btn--primary" th:href="@{/admin/categories/{id}/edit(id=*{id})}">Edit</a>
+
+            <button type="button"
+                    class="v-btn v-btn--danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteCategoryModal">
+                Delete
+            </button>
         </div>
     </div>
 
-    <div class="v-card">
-        <div class="v-card__body">
-            <th:block th:replace="~{shared/_helper :: rowHtml('ID', (*{id}))}"/>
-            <th:block th:replace="~{shared/_helper :: rowHtml('Email', (*{email}))}"/>
-            <th:block th:replace="~{shared/_helper :: rowHtml('Role', (*{role}))}"/>
-            <th:block th:replace="~{shared/_helper :: rowHtml('Status', (*{enabled} ? 'Enabled' : 'Disabled'))}"/>
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/categories}">Categories</a>
+        <span class="v-sep">/</span>
+        <span>View</span>
+    </nav>
+
+    <div class="v-stack">
+        <div class="v-card">
+            <div class="v-card__header">
+                <div>
+                    <h2 class="v-card__title">Details</h2>
+                    <p class="v-card__subtitle">Core fields for this category.</p>
+                </div>
+            </div>
+
+            <div class="v-card__body">
+                <th:block th:replace="~{shared/_helper :: rowHtml('ID', *{id})}"></th:block>
+                <th:block th:replace="~{shared/_helper :: rowHtml('Name', *{name})}"></th:block>
+                <th:block th:replace="~{shared/_helper :: rowHtml('Slug', *{slug})}"></th:block>
+                <th:block th:replace="~{shared/_helper :: rowHtml('Status', *{active ? 'Active' : 'Disabled'})}"></th:block>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete modal -->
+    <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content v-modal">
+                <div class="modal-header v-modal__header">
+                    <div>
+                        <h5 class="v-modal__title">Confirm deletion</h5>
+                        <p class="v-modal__subtitle">This action cannot be undone.</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body v-modal__body">
+                    <div class="v-kv">
+                        <div class="v-kv__label">Category</div>
+                        <div class="v-kv__value v-strong" th:text="*{name}">Category Name</div>
+                    </div>
+
+                    <div class="v-kv">
+                        <div class="v-kv__label">ID</div>
+                        <div class="v-kv__value v-mono" th:text="*{id}">0</div>
+                    </div>
+
+                    <div class="v-modal__warning">
+                        Deleting this category may break products that reference it.
+                    </div>
+                </div>
+
+                <div class="modal-footer v-modal__footer">
+                    <button type="button" class="v-btn v-btn--ghost" data-bs-dismiss="modal">Cancel</button>
+
+                    <form th:action="@{/admin/categories/{id}/delete(id=*{id})}" method="post" class="m-0">
+                        <button type="submit" class="v-btn v-btn--danger">Delete Category</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
-
-</body>
 </html>
+
+
+
