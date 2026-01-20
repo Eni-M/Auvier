@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Profile')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm rounded-3">
+        <div class="card-body p-4">
+
+          <h2 class="card-title text-center mb-4">
+            <i class="bi bi-person-circle"></i> Profile
+          </h2>
+
+          <!-- Username -->
+          <div class="mb-3">
+            <label class="form-label fw-bold" for="username">Username:</label>
+            <p id="username" class="form-control-plaintext" th:text="${user.username}">Username</p>
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label class="form-label fw-bold" for="email">Email:</label>
+            <p id="email" class="form-control-plaintext" th:text="${user.email}">Email</p>
+          </div>
+
+          <!-- Full Name -->
+          <div class="mb-3">
+            <label class="form-label fw-bold" for="fullName">Full Name:</label>
+            <p id="fullName" class="form-control-plaintext" th:text="${user.fullName}">Full Name</p>
+          </div>
+
+          <!-- Role (optional) -->
+          <div class="mb-3" th:if="${user.role}">
+            <label class="form-label fw-bold" for="role">Role:</label>
+            <p id="role" class="form-control-plaintext" th:text="${user.role}">Role</p>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex justify-content-between mt-4">
+            <form th:action="@{/logout}" method="post">
+              <button type="submit" class="btn btn-outline-danger">Logout</button>
+            </form>
+            <a th:href="@{/profile/edit}" class="btn btn-primary">Edit Profile</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

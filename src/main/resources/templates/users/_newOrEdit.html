@@ -1,0 +1,59 @@
+<th:block th:fragment="newOrEditForm(action, userDto)">
+    <form method="post" th:action="@{/admin/users/{id}/edit(id=${userDto.id})}" th:object="${userDto}" class="v-admin-form">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="v-card">
+            <div class="v-card__header">
+                <h2 class="v-card__title" th:text="${userDto.id != null ? 'Edit User' : 'New User'}">User</h2>
+                <p class="v-card__subtitle">Manage user account details.</p>
+            </div>
+
+            <div class="v-card__body">
+                <div class="v-field">
+                    <label class="v-label">Username</label>
+                    <div class="v-control">
+                        <input type="text" class="v-input" th:field="*{username}" required maxlength="30"/>
+                    </div>
+                </div>
+
+                <div class="v-field">
+                    <label class="v-label">First Name</label>
+                    <div class="v-control">
+                        <input type="text" class="v-input" th:field="*{firstName}" required maxlength="50"/>
+                    </div>
+                </div>
+
+                <div class="v-field">
+                    <label class="v-label">Last Name</label>
+                    <div class="v-control">
+                        <input type="text" class="v-input" th:field="*{lastName}" required maxlength="50"/>
+                    </div>
+                </div>
+
+                <div class="v-field">
+                    <label class="v-label">Email</label>
+                    <div class="v-control">
+                        <input type="email" class="v-input" th:field="*{email}" required/>
+                    </div>
+                </div>
+
+                <div class="v-field">
+                    <label class="v-label">Role</label>
+                    <div class="v-control">
+                        <select class="v-input" th:field="*{role}">
+                            <option value="ROLE_USER">User</option>
+                            <option value="ROLE_ADMIN">Admin</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="v-card__footer">
+                <div class="v-actions">
+                    <a class="v-btn v-btn--ghost" th:href="@{/admin/users}">Cancel</a>
+                    <button type="submit" class="v-btn v-btn--primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</th:block>

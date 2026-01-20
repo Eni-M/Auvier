@@ -1,5 +1,5 @@
 package com.auvier.enums;
 
 public enum OrderStatus {
-    CREATED, PAID, SHIPPED, DELIVERED, CANCELLED
+    PENDING, CREATED, PAID, SHIPPED, DELIVERED, CANCELLED
 }
