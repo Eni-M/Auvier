@@ -1,6 +1,8 @@
 package com.auvier.enums;
 
-public enum UserRole {
-    USER,
+public enum Role {
+    CUSTOMER,
     ADMIN
 }
+
+
