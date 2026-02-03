@@ -2,6 +2,7 @@ package com.auvier.dtos.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,5 +45,6 @@ public class UserRegistrationDto {
     private String address;
 
     @Size(max = 20)
+    @Pattern(regexp = "^$|^[+]?[0-9\\s\\-()]+$", message = "Please enter a valid phone number")
     private String phone;
 }

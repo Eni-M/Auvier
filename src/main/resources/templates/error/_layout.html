@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | AUVIER'">Error | AUVIER</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --au-black: #0a0a0a;
+            --au-white: #ffffff;
+            --au-gray: #999999;
+            --au-gray-light: #e8e8e8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--au-white);
+            color: var(--au-black);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .error-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--au-gray-light);
+        }
+        .error-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--au-black);
+            text-decoration: none;
+        }
+        .error-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+        }
+        .error-container {
+            text-align: center;
+            max-width: 500px;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: var(--au-gray);
+            margin-bottom: 1.5rem;
+        }
+        .error-status {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6rem;
+            font-weight: 300;
+            color: var(--au-black);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .error-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            color: var(--au-gray);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .error-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid var(--au-black);
+            transition: all 0.2s ease;
+        }
+        .error-btn--primary {
+            background: var(--au-black);
+            color: var(--au-white);
+        }
+        .error-btn--primary:hover {
+            background: #333;
+        }
+        .error-btn--secondary {
+            background: transparent;
+            color: var(--au-black);
+        }
+        .error-btn--secondary:hover {
+            background: var(--au-black);
+            color: var(--au-white);
+        }
+        .error-footer {
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 0.8125rem;
+            color: var(--au-gray);
+            border-top: 1px solid var(--au-gray-light);
+        }
+    </style>
+</head>
+<body>
+    <header class="error-header">
+        <a th:href="@{/}" class="error-logo">Auvier</a>
+    </header>
+
+    <main class="error-main">
+        <th:block th:replace="${content}"></th:block>
+    </main>
+
+    <footer class="error-footer">
+        &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2026</span> Auvier. All rights reserved.
+    </footer>
+</body>
+</html>

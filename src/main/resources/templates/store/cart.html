@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Shopping Bag')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Breadcrumb -->
+    <nav class="au-breadcrumb">
+        <div class="au-container">
+            <a th:href="@{/}">Home</a>
+            <span>/</span>
+            <span>Shopping Bag</span>
+        </div>
+    </nav>
+
+    <section class="au-section">
+        <div class="au-container">
+            <h1 class="au-page-title">Shopping Bag</h1>
+
+            <!-- Empty Cart State -->
+            <div class="au-cart-empty" id="emptyCart">
+                <i class="bi bi-bag"></i>
+                <h2>Your bag is empty</h2>
+                <p>Looks like you haven't added anything to your bag yet.</p>
+                <a th:href="@{/shop}" class="au-btn au-btn--primary">Continue Shopping</a>
+            </div>
+
+            <!-- Cart with items (hidden by default, shown via JS when items exist) -->
+            <div class="au-cart" id="cartContent" style="display: none;">
+                <div class="au-cart__items">
+                    <!-- Cart items will be dynamically added here -->
+                </div>
+
+                <div class="au-cart__summary">
+                    <div class="au-cart__summary-card">
+                        <h3>Order Summary</h3>
+
+                        <div class="au-cart__summary-row">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal">$0.00</span>
+                        </div>
+                        <div class="au-cart__summary-row">
+                            <span>Shipping</span>
+                            <span>Calculated at checkout</span>
+                        </div>
+                        <div class="au-cart__summary-row au-cart__summary-row--total">
+                            <span>Total</span>
+                            <span id="cartTotal">$0.00</span>
+                        </div>
+
+                        <a th:href="@{/checkout}" class="au-btn au-btn--primary au-btn--full au-btn--lg">
+                            Proceed to Checkout
+                        </a>
+
+                        <p class="au-cart__summary-note">
+                            Shipping and taxes calculated at checkout
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-page-title {
+        font-family: var(--au-font-display);
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-2xl);
+    }
+    .au-cart-empty {
+        text-align: center;
+        padding: var(--au-space-4xl) var(--au-space-xl);
+    }
+    .au-cart-empty i {
+        font-size: 4rem;
+        opacity: 0.2;
+    }
+    .au-cart-empty h2 {
+        font-family: var(--au-font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin: var(--au-space-lg) 0 var(--au-space-sm);
+    }
+    .au-cart-empty p {
+        opacity: 0.6;
+        margin-bottom: var(--au-space-xl);
+    }
+    .au-cart {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: var(--au-space-3xl);
+        align-items: start;
+    }
+    .au-cart__items {
+        display: flex;
+        flex-direction: column;
+        gap: var(--au-space-lg);
+    }
+    .au-cart__item {
+        display: grid;
+        grid-template-columns: 120px 1fr auto;
+        gap: var(--au-space-lg);
+        padding: var(--au-space-lg);
+        border: 1px solid var(--au-color-border);
+        border-radius: 4px;
+    }
+    .au-cart__item-image {
+        aspect-ratio: 4/5;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+    .au-cart__item-info h4 {
+        font-family: var(--au-font-display);
+        font-weight: 400;
+        margin-bottom: var(--au-space-xs);
+    }
+    .au-cart__item-meta {
+        font-size: 0.875rem;
+        opacity: 0.7;
+    }
+    .au-cart__item-price {
+        font-weight: 500;
+    }
+    .au-cart__summary-card {
+        background: var(--au-color-surface);
+        padding: var(--au-space-xl);
+        border-radius: 4px;
+        position: sticky;
+        top: 100px;
+    }
+    .au-cart__summary-card h3 {
+        font-family: var(--au-font-display);
+        font-size: 1.25rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-lg);
+        padding-bottom: var(--au-space-md);
+        border-bottom: 1px solid var(--au-color-border);
+    }
+    .au-cart__summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--au-space-sm) 0;
+        font-size: 0.9375rem;
+    }
+    .au-cart__summary-row--total {
+        font-weight: 600;
+        font-size: 1.125rem;
+        border-top: 1px solid var(--au-color-border);
+        margin-top: var(--au-space-md);
+        padding-top: var(--au-space-md);
+    }
+    .au-cart__summary-note {
+        font-size: 0.8125rem;
+        opacity: 0.6;
+        text-align: center;
+        margin-top: var(--au-space-md);
+    }
+    .au-cart__item-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--au-space-md);
+    }
+    .au-cart__qty {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--au-color-border);
+    }
+    .au-cart__qty-btn {
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    .au-cart__qty-btn:hover {
+        background: var(--au-color-surface);
+    }
+    .au-cart__qty-value {
+        width: 40px;
+        text-align: center;
+        border: none;
+        border-left: 1px solid var(--au-color-border);
+        border-right: 1px solid var(--au-color-border);
+    }
+    .au-cart__remove {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--au-gray);
+        font-size: 0.875rem;
+        text-decoration: underline;
+    }
+    .au-cart__remove:hover {
+        color: var(--au-black);
+    }
+    @media (max-width: 768px) {
+        .au-cart {
+            grid-template-columns: 1fr;
+        }
+        .au-cart__item {
+            grid-template-columns: 80px 1fr;
+        }
+    }
+</style>
+
+<script>
+    // Cart management using localStorage
+    const CART_KEY = 'auvier_cart';
+
+    function getCart() {
+        const cart = localStorage.getItem(CART_KEY);
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        renderCart();
+        // Update header cart count
+        if (typeof window.updateCartCount === 'function') {
+            window.updateCartCount();
+        }
+    }
+
+    function updateQuantity(variantId, delta) {
+        const cart = getCart();
+        const item = cart.find(i => i.variantId === variantId);
+        if (item) {
+            item.quantity = Math.max(1, item.quantity + delta);
+            saveCart(cart);
+        }
+    }
+
+    function removeFromCart(variantId) {
+        const cart = getCart().filter(i => i.variantId !== variantId);
+        saveCart(cart);
+    }
+
+    function renderCart() {
+        const cart = getCart();
+        const emptyCart = document.getElementById('emptyCart');
+        const cartContent = document.getElementById('cartContent');
+        const cartItems = document.querySelector('.au-cart__items');
+
+        if (cart.length === 0) {
+            emptyCart.style.display = 'block';
+            cartContent.style.display = 'none';
+            return;
+        }
+
+        emptyCart.style.display = 'none';
+        cartContent.style.display = 'grid';
+
+        let subtotal = 0;
+        let html = '';
+
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            subtotal += itemTotal;
+            html += `
+                <div class="au-cart__item">
+                    <img class="au-cart__item-image"
+                         src="${item.imageUrl || 'https://via.placeholder.com/120x150'}"
+                         alt="${item.productName}">
+                    <div class="au-cart__item-info">
+                        <h4>${item.productName}</h4>
+                        <p class="au-cart__item-meta">${item.size} / ${item.color}</p>
+                        <p class="au-cart__item-price">$${item.price.toFixed(2)}</p>
+                        <div class="au-cart__item-actions">
+                            <div class="au-cart__qty">
+                                <button class="au-cart__qty-btn" onclick="updateQuantity(${item.variantId}, -1)">−</button>
+                                <span class="au-cart__qty-value">${item.quantity}</span>
+                                <button class="au-cart__qty-btn" onclick="updateQuantity(${item.variantId}, 1)">+</button>
+                            </div>
+                            <button class="au-cart__remove" onclick="removeFromCart(${item.variantId})">Remove</button>
+                        </div>
+                    </div>
+                    <div class="au-cart__item-total">
+                        <strong>$${itemTotal.toFixed(2)}</strong>
+                    </div>
+                </div>
+            `;
+        });
+
+        cartItems.innerHTML = html;
+        document.getElementById('cartSubtotal').textContent = '$' + subtotal.toFixed(2);
+        document.getElementById('cartTotal').textContent = '$' + subtotal.toFixed(2);
+    }
+
+    // Initialize cart on page load
+    document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+</body>
+</html>

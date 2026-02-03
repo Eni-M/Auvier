@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/shared/_layout::layout('Activity Log', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Activity Log</h1>
+            <p class="v-muted">Recent admin actions and changes.</p>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/admin}">Dashboard</a>
+        <span class="v-sep">/</span>
+        <span>Activity Log</span>
+    </nav>
+
+    <!-- Table -->
+    <div class="v-card">
+        <div class="v-card__header">
+            <div>
+                <h2 class="v-card__title">Recent Activity</h2>
+                <p class="v-card__subtitle">Last 50 actions</p>
+            </div>
+        </div>
+
+        <div class="v-tablewrap">
+            <table class="v-table">
+                <thead>
+                <tr>
+                    <th style="width: 150px;">Timestamp</th>
+                    <th style="width: 90px;">Action</th>
+                    <th>Description</th>
+                    <th style="width: 120px;">Admin</th>
+                    <th style="width: 120px;">IP Address</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${logs == null or #lists.isEmpty(logs)}">
+                    <td colspan="5" class="v-empty">
+                        <div class="v-empty__title">No activity yet</div>
+                        <div class="v-empty__text">Admin actions will appear here.</div>
+                    </td>
+                </tr>
+
+                <tr th:each="log : ${logs}">
+                    <td class="v-mono" th:text="${#temporals.format(log.timestamp, 'MMM d, HH:mm:ss')}">Jan 1, 12:00:00</td>
+                    <td>
+                        <span class="v-badge"
+                              th:classappend="${log.action == 'CREATE'} ? ' v-badge--ok' : (${log.action == 'DELETE'} ? ' v-badge--danger' : ' v-badge--muted')"
+                              th:text="${log.action}">ACTION</span>
+                    </td>
+                    <td>
+                        <div th:if="${log.description != null}" th:text="${log.description}">Description</div>
+                        <div th:unless="${log.description != null}">
+                            <span th:text="${log.entityType}">Entity</span>
+                            <span class="v-muted"> #</span><span class="v-mono" th:text="${log.entityId}">1</span>
+                            <span th:if="${log.entityName != null}"> - </span>
+                            <strong th:if="${log.entityName != null}" th:text="${log.entityName}">Name</strong>
+                        </div>
+                        <div th:if="${log.changesDetail != null}" class="v-muted" style="font-size: 11px; margin-top: 2px;" th:text="${log.changesDetail}">Changes</div>
+                    </td>
+                    <td th:text="${log.adminUsername}">admin</td>
+                    <td class="v-mono v-muted" th:text="${log.ipAddress}">127.0.0.1</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

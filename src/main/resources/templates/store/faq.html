@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('FAQ')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Page Header -->
+    <section class="au-page-header">
+        <div class="au-container">
+            <h1 class="au-page-title">Frequently Asked Questions</h1>
+            <p class="au-page-subtitle">Find answers to common questions</p>
+        </div>
+    </section>
+
+    <section class="au-section">
+        <div class="au-container au-container--sm">
+            <!-- Orders & Shipping -->
+            <div class="au-faq-section">
+                <h2 class="au-faq-category">Orders & Shipping</h2>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">How long will my order take to arrive?</summary>
+                    <div class="au-faq-answer">
+                        <p>Standard shipping typically takes 5-7 business days within the continental US. Express shipping (2-3 business days) and overnight options are available at checkout. International orders may take 7-14 business days depending on the destination.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">Do you offer free shipping?</summary>
+                    <div class="au-faq-answer">
+                        <p>Yes! We offer complimentary standard shipping on all orders over $500. Orders under $500 have a flat rate shipping fee of $15 for standard delivery.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">How can I track my order?</summary>
+                    <div class="au-faq-answer">
+                        <p>Once your order ships, you'll receive an email with tracking information. You can also track your order by logging into your account and viewing your order history.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">Do you ship internationally?</summary>
+                    <div class="au-faq-answer">
+                        <p>Yes, we ship to most countries worldwide. International shipping rates and delivery times vary by destination. All duties and taxes are the responsibility of the customer.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Returns & Exchanges -->
+            <div class="au-faq-section">
+                <h2 class="au-faq-category">Returns & Exchanges</h2>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">What is your return policy?</summary>
+                    <div class="au-faq-answer">
+                        <p>We accept returns within 30 days of delivery for unworn items in their original condition with all tags attached. Items must be returned in original packaging. Final sale items cannot be returned.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">How do I initiate a return?</summary>
+                    <div class="au-faq-answer">
+                        <p>To start a return, log into your account, find the order, and select "Request Return." You'll receive a prepaid shipping label via email. For orders placed as a guest, please contact our customer service team.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">When will I receive my refund?</summary>
+                    <div class="au-faq-answer">
+                        <p>Refunds are processed within 5-7 business days after we receive your return. The refund will be issued to your original payment method. Please allow an additional 3-5 business days for the refund to appear on your statement.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">Can I exchange an item for a different size?</summary>
+                    <div class="au-faq-answer">
+                        <p>We recommend returning your item for a refund and placing a new order for the desired size. This ensures the fastest processing time and guarantees availability of your preferred size.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Products & Care -->
+            <div class="au-faq-section">
+                <h2 class="au-faq-category">Products & Care</h2>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">How do I find my size?</summary>
+                    <div class="au-faq-answer">
+                        <p>Each product page includes a detailed size guide with measurements. If you're between sizes, we generally recommend sizing up for a more comfortable fit. For personalized assistance, please contact our customer service team.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">How should I care for my Auvier pieces?</summary>
+                    <div class="au-faq-answer">
+                        <p>Care instructions are included on each garment's label and product page. Most pieces benefit from dry cleaning or gentle hand washing. We recommend storing items in breathable garment bags away from direct sunlight.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">Are your products sustainably made?</summary>
+                    <div class="au-faq-answer">
+                        <p>Sustainability is central to our philosophy. We use responsibly sourced materials, work with certified manufacturers, and design timeless pieces meant to last for years. Learn more on our About page.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Account & Payment -->
+            <div class="au-faq-section">
+                <h2 class="au-faq-category">Account & Payment</h2>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">What payment methods do you accept?</summary>
+                    <div class="au-faq-answer">
+                        <p>We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, and Google Pay. All transactions are securely encrypted.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">Do I need an account to place an order?</summary>
+                    <div class="au-faq-answer">
+                        <p>No, you can check out as a guest. However, creating an account allows you to track orders, save your shipping information, and view your purchase history.</p>
+                    </div>
+                </details>
+
+                <details class="au-faq-item">
+                    <summary class="au-faq-question">Is my payment information secure?</summary>
+                    <div class="au-faq-answer">
+                        <p>Absolutely. We use industry-standard SSL encryption to protect your personal and payment information. We never store your full credit card details on our servers.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Still need help -->
+            <div class="au-faq-cta">
+                <h3>Still have questions?</h3>
+                <p>Our customer service team is happy to help.</p>
+                <a th:href="@{/contact}" class="au-btn au-btn--primary">Contact Us</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-page-header { text-align: center; padding: var(--au-space-4xl) 0 var(--au-space-2xl); background: var(--au-cream); }
+    .au-page-title { font-family: var(--au-font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-page-subtitle { color: var(--au-gray); }
+    .au-faq-section { margin-bottom: var(--au-space-3xl); }
+    .au-faq-category { font-family: var(--au-font-display); font-size: 1.5rem; font-weight: 400; padding-bottom: var(--au-space-md); border-bottom: 1px solid var(--au-gray-light); margin-bottom: var(--au-space-lg); }
+    .au-faq-item { border-bottom: 1px solid var(--au-gray-light); }
+    .au-faq-question { padding: var(--au-space-lg) 0; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+    .au-faq-question::-webkit-details-marker { display: none; }
+    .au-faq-question::after { content: '+'; font-size: 1.5rem; font-weight: 300; color: var(--au-gray); transition: transform 0.2s ease; }
+    .au-faq-item[open] .au-faq-question::after { content: '−'; }
+    .au-faq-answer { padding-bottom: var(--au-space-lg); color: var(--au-gray-dark); line-height: 1.7; }
+    .au-faq-answer p { margin: 0; }
+    .au-faq-cta { text-align: center; background: var(--au-cream); padding: var(--au-space-3xl); margin-top: var(--au-space-3xl); }
+    .au-faq-cta h3 { font-family: var(--au-font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-faq-cta p { color: var(--au-gray-dark); margin-bottom: var(--au-space-lg); }
+</style>
+</body>
+</html>

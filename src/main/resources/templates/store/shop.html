@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Shop')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Breadcrumbs -->
+    <div class="au-container">
+        <nav class="au-breadcrumbs">
+            <a th:href="@{/}">Home</a>
+            <span>/</span>
+            <span th:if="${category != null}" th:text="${category.name}">Category</span>
+            <span th:unless="${category != null}">All Products</span>
+        </nav>
+    </div>
+
+    <!-- Page Header -->
+    <div class="au-container">
+        <div class="au-section-header" style="margin: var(--au-space-2xl) 0;">
+            <h1 class="au-section-header__title" th:text="${category != null ? category.name : 'All Products'}">
+                All Products
+            </h1>
+            <p class="au-section-header__subtitle" th:if="${totalProducts != null}"
+               th:text="${totalProducts + ' products'}">
+                24 products
+            </p>
+        </div>
+    </div>
+
+    <div class="au-container">
+        <div style="display: grid; grid-template-columns: 250px 1fr; gap: var(--au-space-3xl);">
+
+            <!-- Sidebar Filters -->
+            <aside class="au-sidebar">
+                <form th:action="@{/shop}" method="get" id="filterForm">
+                    <!-- Hidden field for search query if present -->
+                    <input type="hidden" name="q" th:value="${param.q}" th:if="${param.q != null}">
+
+                    <!-- Categories -->
+                    <div class="au-sidebar__section">
+                        <h4 class="au-sidebar__title is-open">
+                            Categories <i class="bi bi-chevron-down"></i>
+                        </h4>
+                        <div class="au-sidebar__list">
+                            <a th:href="@{/shop}" th:classappend="${category == null ? ' is-active' : ''}">
+                                All Products
+                            </a>
+                            <a th:each="cat : ${categories}"
+                               th:href="@{/shop(category=${cat.slug})}"
+                               th:text="${cat.name}"
+                               th:classappend="${category != null and category.id == cat.id ? ' is-active' : ''}">
+                                Category
+                            </a>
+                            <!-- Static demo if no categories -->
+                            <th:block th:unless="${categories != null}">
+                                <a href="#">Women</a>
+                                <a href="#">Men</a>
+                                <a href="#">Outerwear</a>
+                                <a href="#">Dresses</a>
+                                <a href="#">Accessories</a>
+                                <a href="#">Footwear</a>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <!-- Size Filter -->
+                    <div class="au-sidebar__section">
+                        <h4 class="au-sidebar__title is-open">
+                            Size <i class="bi bi-chevron-down"></i>
+                        </h4>
+                        <div class="au-sidebar__list">
+                            <label><input type="checkbox" name="size" value="XS" class="au-sidebar__checkbox"> XS</label>
+                            <label><input type="checkbox" name="size" value="S" class="au-sidebar__checkbox"> S</label>
+                            <label><input type="checkbox" name="size" value="M" class="au-sidebar__checkbox"> M</label>
+                            <label><input type="checkbox" name="size" value="L" class="au-sidebar__checkbox"> L</label>
+                            <label><input type="checkbox" name="size" value="XL" class="au-sidebar__checkbox"> XL</label>
+                        </div>
+                    </div>
+
+                    <!-- Color Filter -->
+                    <div class="au-sidebar__section">
+                        <h4 class="au-sidebar__title is-open">
+                            Color <i class="bi bi-chevron-down"></i>
+                        </h4>
+                        <div class="au-color-swatches">
+                            <button type="button" class="au-color-swatch" style="background: #000000;" title="Black" data-color="black"></button>
+                            <button type="button" class="au-color-swatch" style="background: #FFFFFF; border: 1px solid #ccc;" title="White" data-color="white"></button>
+                            <button type="button" class="au-color-swatch" style="background: #1a1a50;" title="Navy" data-color="navy"></button>
+                            <button type="button" class="au-color-swatch" style="background: #8B4513;" title="Brown" data-color="brown"></button>
+                            <button type="button" class="au-color-swatch" style="background: #808080;" title="Gray" data-color="gray"></button>
+                            <button type="button" class="au-color-swatch" style="background: #F5F5DC;" title="Beige" data-color="beige"></button>
+                            <button type="button" class="au-color-swatch" style="background: #800020;" title="Burgundy" data-color="burgundy"></button>
+                            <button type="button" class="au-color-swatch" style="background: #013220;" title="Green" data-color="green"></button>
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="au-sidebar__section">
+                        <h4 class="au-sidebar__title is-open">
+                            Price <i class="bi bi-chevron-down"></i>
+                        </h4>
+                        <div class="au-price-range">
+                            <input type="number" name="minPrice" placeholder="Min" th:value="${param.minPrice}">
+                            <span>—</span>
+                            <input type="number" name="maxPrice" placeholder="Max" th:value="${param.maxPrice}">
+                        </div>
+                        <button type="submit" class="au-btn au-btn--secondary au-btn--full" style="margin-top: var(--au-space-md);">
+                            Apply Filters
+                        </button>
+                    </div>
+
+                    <!-- Availability -->
+                    <div class="au-sidebar__section">
+                        <h4 class="au-sidebar__title is-open">
+                            Availability <i class="bi bi-chevron-down"></i>
+                        </h4>
+                        <div class="au-sidebar__list">
+                            <label>
+                                <input type="checkbox" name="inStock" value="true" class="au-sidebar__checkbox">
+                                In Stock
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- Products Grid -->
+            <div>
+                <!-- Sort & View Options -->
+                <div class="au-filters">
+                    <div class="au-filters__left">
+                        <span th:if="${totalProducts != null}" th:text="${totalProducts + ' products'}">24 products</span>
+                    </div>
+                    <div class="au-filters__right">
+                        <select class="au-sort-select" name="sort" onchange="updateSort(this.value)">
+                            <option value="newest" th:selected="${param.sort == null or param.sort == 'newest'}">Newest</option>
+                            <option value="price-asc" th:selected="${param.sort == 'price-asc'}">Price: Low to High</option>
+                            <option value="price-desc" th:selected="${param.sort == 'price-desc'}">Price: High to Low</option>
+                            <option value="name-asc" th:selected="${param.sort == 'name-asc'}">Name: A-Z</option>
+                        </select>
+                        <div class="au-view-toggle">
+                            <button type="button" data-view="grid" class="is-active"><i class="bi bi-grid-3x3-gap"></i></button>
+                            <button type="button" data-view="list"><i class="bi bi-list"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div class="au-products au-products--3col" th:if="${products != null and !products.isEmpty()}">
+                    <article class="au-product" th:each="product : ${products}">
+                        <div class="au-product__media">
+                            <a th:href="@{/shop/product/{slug}(slug=${product.slug})}">
+                                <img class="au-product__image"
+                                     th:src="${product.variants != null && !product.variants.isEmpty() && product.variants[0].imageUrl != null} ? ${product.variants[0].imageUrl} : 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80'"
+                                     th:alt="${product.name}">
+                            </a>
+                            <span class="au-product__badge">New</span>
+                            <div class="au-product__actions">
+                                <a th:href="@{/shop/product/{slug}(slug=${product.slug})}" class="au-product__action-btn">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                        <div class="au-product__info">
+                            <p class="au-product__brand">Auvier</p>
+                            <h3 class="au-product__name">
+                                <a th:href="@{/shop/product/{slug}(slug=${product.slug})}" th:text="${product.name}">Product Name</a>
+                            </h3>
+                            <p class="au-product__price" th:if="${product.variants != null and !product.variants.isEmpty()}"
+                               th:text="${'$' + #numbers.formatDecimal(product.variants[0].price, 1, 2)}">$299.00</p>
+                            <p class="au-product__price" th:unless="${product.variants != null and !product.variants.isEmpty()}">Price TBD</p>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Empty state if no products -->
+                <div class="au-empty-state" th:if="${products == null or products.isEmpty()}">
+                    <div style="text-align: center; padding: 80px 20px;">
+                        <i class="bi bi-bag-x" style="font-size: 48px; opacity: 0.3;"></i>
+                        <h3 style="margin-top: 20px;">No products found</h3>
+                        <p style="opacity: 0.6; margin-top: 10px;">Check back later for new arrivals.</p>
+                        <a th:href="@{/shop}" class="au-btn au-btn--secondary" style="margin-top: 20px;">View All Products</a>
+                    </div>
+                </div>
+
+
+                <!-- Pagination -->
+                <nav class="au-pagination" th:if="${totalPages != null and totalPages > 1}">
+                    <a th:href="@{/shop(page=${currentPage - 1}, category=${param.category}, sort=${param.sort})}"
+                       class="au-pagination__btn" th:if="${currentPage > 0}">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+
+                    <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/shop(page=${i}, category=${param.category}, sort=${param.sort})}"
+                           class="au-pagination__btn"
+                           th:classappend="${i == currentPage ? 'is-active' : ''}"
+                           th:text="${i + 1}">1</a>
+                    </th:block>
+
+                    <a th:href="@{/shop(page=${currentPage + 1}, category=${param.category}, sort=${param.sort})}"
+                       class="au-pagination__btn" th:if="${currentPage < totalPages - 1}">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<script>
+    function updateSort(value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort', value);
+        window.location.href = url.toString();
+    }
+</script>
+
+</body>
+</html>

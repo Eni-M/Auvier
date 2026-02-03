@@ -48,6 +48,16 @@ public class CategoryServiceImpl implements CategoryService {
         return mapper.toDtoList(repository.findByActiveTrue());
     }
 
+    @Override
+    public List<CategoryDto> findParentCategories() {
+        return mapper.toDtoList(repository.findByParentIsNullAndActiveTrue());
+    }
+
+    @Override
+    public List<CategoryDto> findChildCategories() {
+        return mapper.toDtoList(repository.findByParentIsNotNullAndActiveTrue());
+    }
+
 
     @Override
     public CategoryDto findOne(Long id) {

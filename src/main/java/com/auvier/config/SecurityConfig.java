@@ -33,8 +33,6 @@ public class SecurityConfig {
             // Spring .roles() prefixing means CUSTOMER becomes ROLE_CUSTOMER
             if (roles.contains("ROLE_ADMIN")) {
                 response.sendRedirect("/admin");
-            } else if (roles.contains("ROLE_CUSTOMER")) {
-                response.sendRedirect("/home");
             } else {
                 response.sendRedirect("/");
             }
@@ -45,11 +43,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(configurer -> configurer
-                        .requestMatchers("/assets/**", "/error", "/403", "/favicon.ico").permitAll()
+                        .requestMatchers("/assets/**", "/uploads/**", "/error", "/403", "/favicon.ico").permitAll()
+                        .requestMatchers("/", "/shop", "/shop/**", "/about", "/collections", "/contact", "/faq", "/shipping", "/size-guide", "/careers", "/press").permitAll()
+                        .requestMatchers("/api/stripe/webhook").permitAll() // Stripe webhook - no auth
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Admin API endpoints
                         .requestMatchers("/login", "/register").anonymous()
                         .requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
-                        .requestMatchers("/home").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/account", "/profile", "/cart", "/checkout/**", "/orders/**").authenticated()
+                        .anyRequest().permitAll()
+                )
+                // Disable CSRF for Stripe webhook endpoint
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/stripe/webhook")
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")

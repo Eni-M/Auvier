@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/shared/_layout::layout('Products', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Products</h1>
+            <p class="v-muted">Manage products. Stock is handled via variants.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a th:href="@{/admin/products/new}" class="v-btn v-btn--primary">New Product</a>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <span>Products</span>
+    </nav>
+
+    <!-- Alerts -->
+    <div th:if="${error}" class="v-alert v-alert--danger">
+        <div class="v-alert__text" th:text="${error}"></div>
+        <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+    </div>
+
+    <div th:if="${success}" class="v-alert v-alert--success">
+        <div class="v-alert__text" th:text="${success}"></div>
+        <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+    </div>
+
+    <!-- Table -->
+    <div class="v-card">
+        <div class="v-card__header">
+            <div>
+                <h2 class="v-card__title">All products</h2>
+                <p class="v-card__subtitle"
+                   th:text="${products != null ? #lists.size(products) + ' total' : '0 total'}">0 total</p>
+            </div>
+        </div>
+
+        <div class="v-tablewrap">
+            <table class="v-table">
+                <thead>
+                <tr>
+                    <th style="width: 90px;">ID</th>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th style="width: 140px;">Status</th>
+                    <th style="width: 220px;">Category</th>
+                    <th style="width: 220px;">Subcategory</th>
+                    <th style="width: 300px;" class="v-th-right">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${products == null or #lists.isEmpty(products)}">
+                    <td colspan="7" class="v-empty">
+                        <div class="v-empty__title">No products yet</div>
+                        <div class="v-empty__text">Create a product, then add variants to set stock.</div>
+                        <a th:href="@{/admin/products/new}" class="v-btn v-btn--primary">New Product</a>
+                    </td>
+                </tr>
+
+                <tr th:each="p : ${products}">
+                    <td class="v-mono" th:text="${p.id}">1</td>
+
+                    <td>
+                        <div class="v-strong" th:text="${p.name}">Black Hoodie</div>
+                    </td>
+
+                    <td class="v-mono" th:text="${p.slug}">black-hoodie</td>
+
+                    <td>
+        <span class="v-badge"
+              th:classappend="${p != null && p.active} ? ' v-badge--ok' : ' v-badge--muted'"
+              th:text="${p != null && p.active} ? 'Active' : 'Disabled'">Active</span>
+                    </td>
+
+                    <!-- Category name, fully null safe -->
+                    <td th:text="${p != null && p.category != null ? p.category.name : '-'}">Hoodies</td>
+
+                    <!-- Subcategory name, fully null safe -->
+                    <td th:text="${p != null && p.subCategory != null ? p.subCategory.name : '-'}">Winter Hoodies</td>
+
+                    <td class="v-td-right">
+                        <div class="v-btngroup">
+                            <a th:href="@{/admin/products/{id}/view(id=${p.id})}"
+                               class="v-btn v-btn--ghost v-btn--sm">View</a>
+
+                            <a th:href="@{/admin/products/{id}/edit(id=${p.id})}"
+                               class="v-btn v-btn--ghost v-btn--sm">Edit</a>
+
+                            <a th:href="@{/admin/products/{productId}/variants(productId=${p.id})}"
+                               class="v-btn v-btn--primary v-btn--sm">Variants</a>
+
+                            <button type="button"
+                                    class="v-btn v-btn--sm v-btn--danger delete-btn"
+                                    th:data-id="${p.id}"
+                                    th:data-name="${p.name}">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="v-modal" style="display:none;">
+        <div class="v-modal__content">
+            <h3 class="v-modal__title">Confirm Deletion</h3>
+            <p class="v-muted" style="margin-bottom: 12px;">This action cannot be undone.</p>
+
+            <div class="v-kv" style="margin-bottom: 8px;">
+                <div class="v-kv__label">Product</div>
+                <div class="v-kv__value v-strong" id="modalItemName">Product Name</div>
+            </div>
+
+            <div class="v-kv" style="margin-bottom: 16px;">
+                <div class="v-kv__label">ID</div>
+                <div class="v-kv__value v-mono" id="modalItemId">0</div>
+            </div>
+
+            <div class="v-modal__warning" style="margin-bottom: 20px;">
+                Deleting removes this product permanently (and all its variants).
+            </div>
+
+            <div class="v-modal__actions">
+                <button type="button" onclick="closeModal()" class="v-btn v-btn--ghost">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="v-btn v-btn--danger">Delete Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.delete-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
+                var name = this.getAttribute('data-name');
+                document.getElementById('modalItemName').textContent = name || 'this product';
+                document.getElementById('modalItemId').textContent = id;
+                document.getElementById('deleteForm').action = '/admin/products/' + id + '/delete';
+                document.getElementById('deleteModal').style.display = 'flex';
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</div>
+</html>

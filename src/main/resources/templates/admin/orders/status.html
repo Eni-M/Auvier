@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('Update Order Status', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Update Status - Order #<span th:text="${order.id}">1</span></h1>
+            <p class="v-muted">Change the order status.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="v-btn v-btn--ghost">← Back to Order</a>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/orders}">Orders</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/orders/{id}(id=${order.id})}" th:text="'#' + ${order.id}">#1</a>
+        <span class="v-sep">/</span>
+        <span>Status</span>
+    </nav>
+
+    <!-- Alerts -->
+    <div class="v-stack" th:if="${error}">
+        <div class="v-alert v-alert--danger">
+            <div class="v-alert__text" th:text="${error}"></div>
+            <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="v-card">
+                <div class="v-card__header">
+                    <h2 class="v-card__title">Change Status</h2>
+                </div>
+                <div class="v-card__body">
+                    <div class="mb-4">
+                        <p class="v-muted">Current Status:</p>
+                        <span class="v-badge v-badge--lg"
+                              th:classappend="${order.status.name() == 'DELIVERED'} ? ' v-badge--ok' :
+                                              (${order.status.name() == 'CANCELLED'} ? ' v-badge--danger' :
+                                              (${order.status.name() == 'SHIPPED'} ? ' v-badge--info' :
+                                              (${order.status.name() == 'PAID'} ? ' v-badge--success' : ' v-badge--muted')))"
+                              th:text="${order.status}">
+                            PENDING
+                        </span>
+                    </div>
+
+                    <form th:action="@{/admin/orders/{id}/status(id=${order.id})}"
+                          th:object="${statusUpdateDto}"
+                          method="post">
+
+                        <div class="mb-3">
+                            <label for="status" class="v-label">New Status</label>
+                            <select th:field="*{status}" id="status" class="v-input" required>
+                                <option value="">-- Select Status --</option>
+                                <option th:each="s : ${orderStatuses}"
+                                        th:value="${s}"
+                                        th:text="${s}"
+                                        th:disabled="${s == order.status}">
+                                    STATUS
+                                </option>
+                            </select>
+                            <p th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="v-error"></p>
+                        </div>
+
+                        <div class="v-card__footer">
+                            <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="v-btn v-btn--ghost">Cancel</a>
+                            <button type="submit" class="v-btn v-btn--primary">Update Status</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Status Transition Guide -->
+            <div class="v-card mt-4">
+                <div class="v-card__header">
+                    <h2 class="v-card__title">Status Flow</h2>
+                </div>
+                <div class="v-card__body">
+                    <p class="v-muted mb-3">Valid status transitions:</p>
+                    <ul class="v-list">
+                        <li><strong>PENDING</strong> → CREATED, CANCELLED</li>
+                        <li><strong>CREATED</strong> → PAID, CANCELLED</li>
+                        <li><strong>PAID</strong> → SHIPPED, CANCELLED</li>
+                        <li><strong>SHIPPED</strong> → DELIVERED</li>
+                        <li><strong>DELIVERED</strong> → (final state)</li>
+                        <li><strong>CANCELLED</strong> → (final state)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

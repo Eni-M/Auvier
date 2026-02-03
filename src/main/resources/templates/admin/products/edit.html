@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('Edit Product', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Edit Product</h1>
+            <p class="v-muted">Update core product details. Stock lives in variants.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/products}">Back</a>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/products}">Products</a>
+        <span class="v-sep">/</span>
+        <span>Edit</span>
+    </nav>
+
+    <!-- Content -->
+    <div class="v-stack">
+        <th:block th:replace="~{admin/products/_newOrEdit :: newOrEditForm(@{/admin/products/{id}/edit(id=${productDto.id})}, ${productDto})}"></th:block>
+    </div>
+
+</div>
+</html>
+

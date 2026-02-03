@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('My Orders')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Breadcrumb -->
+    <nav class="au-breadcrumb">
+        <div class="au-container">
+            <a th:href="@{/}">Home</a>
+            <span>/</span>
+            <a th:href="@{/profile}">Account</a>
+            <span>/</span>
+            <span>Orders</span>
+        </div>
+    </nav>
+
+    <section class="au-section">
+        <div class="au-container">
+            <h1 class="au-page-title">My Orders</h1>
+
+            <!-- Orders List -->
+            <div class="au-orders" th:if="${orders != null && !orders.isEmpty()}">
+                <div class="au-order-card" th:each="order : ${orders}">
+                    <div class="au-order-card__header">
+                        <div class="au-order-card__info">
+                            <span class="au-order-card__number">Order #<span th:text="${order.id}">123</span></span>
+                            <span class="au-order-card__date" th:text="${#temporals.format(order.createdAt, 'MMM d, yyyy')}">Jan 1, 2026</span>
+                        </div>
+                        <span class="au-order-card__status" th:classappend="'au-status--' + ${order.status.toString().toLowerCase()}" th:text="${order.status}">Pending</span>
+                    </div>
+
+                    <div class="au-order-card__body">
+                        <div class="au-order-card__summary">
+                            <span class="au-order-card__items" th:text="${order.itemCount} + ' item(s)'">3 items</span>
+                            <span class="au-order-card__total" th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}">$299.00</span>
+                        </div>
+                    </div>
+
+                    <div class="au-order-card__footer">
+                        <a th:href="@{/orders/{id}(id=${order.id})}" class="au-btn au-btn--secondary au-btn--sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="au-orders-empty" th:if="${orders == null || orders.isEmpty()}">
+                <i class="bi bi-box-seam"></i>
+                <h2>No orders yet</h2>
+                <p>When you place an order, it will appear here.</p>
+                <a th:href="@{/shop}" class="au-btn au-btn--primary">Start Shopping</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-page-title {
+        font-family: var(--au-font-display);
+        font-size: 2rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-2xl);
+    }
+    .au-orders {
+        display: flex;
+        flex-direction: column;
+        gap: var(--au-space-lg);
+    }
+    .au-order-card {
+        border: 1px solid var(--au-gray-light);
+        padding: var(--au-space-lg);
+    }
+    .au-order-card__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: var(--au-space-md);
+        padding-bottom: var(--au-space-md);
+        border-bottom: 1px solid var(--au-gray-light);
+    }
+    .au-order-card__info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .au-order-card__number {
+        font-weight: 600;
+    }
+    .au-order-card__date {
+        font-size: 0.875rem;
+        color: var(--au-gray);
+    }
+    .au-order-card__status {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 4px 12px;
+        border-radius: 2px;
+    }
+    .au-status--pending { background: #fef3c7; color: #92400e; }
+    .au-status--paid { background: #d1fae5; color: #065f46; }
+    .au-status--processing { background: #dbeafe; color: #1e40af; }
+    .au-status--shipped { background: #e0e7ff; color: #3730a3; }
+    .au-status--delivered { background: #d1fae5; color: #065f46; }
+    .au-status--cancelled { background: #fee2e2; color: #991b1b; }
+    .au-order-card__body {
+        margin-bottom: var(--au-space-md);
+    }
+    .au-order-card__summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .au-order-card__items {
+        color: var(--au-gray-dark);
+    }
+    .au-order-card__total {
+        font-weight: 600;
+        font-size: 1.125rem;
+    }
+    .au-order-card__footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .au-orders-empty {
+        text-align: center;
+        padding: var(--au-space-4xl) var(--au-space-xl);
+    }
+    .au-orders-empty i {
+        font-size: 4rem;
+        opacity: 0.2;
+    }
+    .au-orders-empty h2 {
+        font-family: var(--au-font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin: var(--au-space-lg) 0 var(--au-space-sm);
+    }
+    .au-orders-empty p {
+        color: var(--au-gray);
+        margin-bottom: var(--au-space-xl);
+    }
+</style>
+</body>
+</html>

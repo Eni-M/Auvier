@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
-    public String index(Authentication auth) {
 
-        if (auth != null && auth.isAuthenticated()) {
-            return "redirect:/dashboard";
+    @GetMapping("/dashboard")
+    public String dashboard(Authentication auth) {
+        if (auth != null && auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return "redirect:/admin";
         }
-
-        return "public/home";
+        return "redirect:/";
     }
 }
 

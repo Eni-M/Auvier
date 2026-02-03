@@ -21,7 +21,7 @@ public class UserController {
     public String listUsers(Model model) {
         model.addAttribute("users", userService.findAll());
         model.addAttribute("canDelete", userService.isDeleteAllowed());
-        return "users/list";
+        return "admin/users/list";
     }
 
     @GetMapping("/{id}/edit")
@@ -29,7 +29,7 @@ public class UserController {
         UserSummaryDto user = userService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         model.addAttribute("userDto", user);
-        return "users/edit";
+        return "admin/users/edit";
     }
 
     @PostMapping("/{id}/edit")
@@ -58,6 +58,6 @@ public class UserController {
 
         model.addAttribute("userDto", user);
         model.addAttribute("canDelete", userService.isDeleteAllowed());
-        return "users/view";
+        return "admin/users/view";
     }
 }

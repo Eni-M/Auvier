@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Order Confirmed')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <section class="au-section">
+        <div class="au-container">
+            <div class="au-success-content">
+                <div class="au-success-icon">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <h1 class="au-success-title">Thank You for Your Order!</h1>
+                <p class="au-success-subtitle">Your order has been placed successfully.</p>
+
+                <div class="au-success-details" th:if="${order != null}">
+                    <div class="au-success-order-number">
+                        <span>Order Number</span>
+                        <strong th:text="'#' + ${order.id}">AUV-123456</strong>
+                    </div>
+
+                    <div class="au-success-info">
+                        <p>A confirmation email has been sent to your email address.</p>
+                        <p>You can track your order status in your account.</p>
+                    </div>
+                </div>
+
+                <div class="au-success-next">
+                    <h3>What's Next?</h3>
+                    <div class="au-success-steps">
+                        <div class="au-success-step">
+                            <div class="au-success-step-icon"><i class="bi bi-envelope"></i></div>
+                            <h4>Order Confirmation</h4>
+                            <p>You'll receive an email confirmation with your order details.</p>
+                        </div>
+                        <div class="au-success-step">
+                            <div class="au-success-step-icon"><i class="bi bi-box-seam"></i></div>
+                            <h4>Order Processing</h4>
+                            <p>We'll prepare your items with care and attention to detail.</p>
+                        </div>
+                        <div class="au-success-step">
+                            <div class="au-success-step-icon"><i class="bi bi-truck"></i></div>
+                            <h4>Shipping</h4>
+                            <p>You'll receive tracking information once your order ships.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="au-success-actions">
+                    <a th:href="@{/profile}" class="au-btn au-btn--primary">View My Orders</a>
+                    <a th:href="@{/shop}" class="au-btn au-btn--secondary">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<script>
+    // Clear cart after successful purchase
+    localStorage.removeItem('auvier_cart');
+    // Update cart count in header
+    if (typeof window.updateCartCount === 'function') {
+        window.updateCartCount();
+    }
+</script>
+
+<style>
+    .au-success-content {
+        max-width: 700px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .au-success-icon {
+        font-size: 5rem;
+        color: var(--au-success, #2d7d46);
+        margin-bottom: var(--au-space-xl);
+    }
+    .au-success-title {
+        font-family: var(--au-font-display);
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+        font-weight: 400;
+        margin-bottom: var(--au-space-sm);
+    }
+    .au-success-subtitle {
+        font-size: 1.125rem;
+        color: var(--au-gray-dark);
+        margin-bottom: var(--au-space-2xl);
+    }
+    .au-success-details {
+        background: var(--au-cream);
+        padding: var(--au-space-xl);
+        margin-bottom: var(--au-space-3xl);
+    }
+    .au-success-order-number {
+        display: flex;
+        flex-direction: column;
+        gap: var(--au-space-xs);
+        margin-bottom: var(--au-space-lg);
+    }
+    .au-success-order-number span {
+        font-size: 0.875rem;
+        color: var(--au-gray);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .au-success-order-number strong {
+        font-family: var(--au-font-display);
+        font-size: 1.5rem;
+    }
+    .au-success-info p {
+        color: var(--au-gray-dark);
+        margin: var(--au-space-xs) 0;
+    }
+    .au-success-next {
+        margin-bottom: var(--au-space-3xl);
+    }
+    .au-success-next h3 {
+        font-family: var(--au-font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-xl);
+    }
+    .au-success-steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--au-space-xl);
+    }
+    .au-success-step {
+        padding: var(--au-space-lg);
+    }
+    .au-success-step-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto var(--au-space-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--au-gray-light);
+        border-radius: 50%;
+        font-size: 1.5rem;
+        color: var(--au-gray);
+    }
+    .au-success-step h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: var(--au-space-sm);
+    }
+    .au-success-step p {
+        font-size: 0.875rem;
+        color: var(--au-gray-dark);
+        line-height: 1.5;
+    }
+    .au-success-actions {
+        display: flex;
+        gap: var(--au-space-md);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    @media (max-width: 768px) {
+        .au-success-steps { grid-template-columns: 1fr; }
+    }
+</style>
+</body>
+</html>

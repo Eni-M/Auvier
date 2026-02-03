@@ -36,5 +36,8 @@ public class ProductVariantDto {
     @NotNull
     private Size size;
 
+    @jakarta.validation.constraints.Size(max = 500)
+    private String imageUrl;
+
     private boolean active = true;
 }

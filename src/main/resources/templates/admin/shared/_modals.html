@@ -1,0 +1,81 @@
+<div th:fragment="deleteUserModal" id="deleteModal" class="v-modal" style="display:none;" aria-hidden="true">
+    <div class="v-modal__content">
+        <h3 class="v-modal__title">Confirm Deletion</h3>
+        <p class="v-muted" style="margin-bottom: 12px;">This action cannot be undone.</p>
+
+        <div class="v-kv" style="margin-bottom: 8px;">
+            <div class="v-kv__label">User</div>
+            <div class="v-kv__value v-strong" id="modalUserName">Username</div>
+        </div>
+
+        <div class="v-kv" style="margin-bottom: 16px;">
+            <div class="v-kv__label">ID</div>
+            <div class="v-kv__value v-mono" id="modalUserId">0</div>
+        </div>
+
+        <div class="v-modal__warning" style="margin-bottom: 20px;">
+            Deleting removes this user permanently. Their orders and data will be affected.
+        </div>
+
+        <div class="v-modal__actions">
+            <button type="button" onclick="closeModal()" class="v-btn v-btn--ghost">Cancel</button>
+
+            <form id="deleteForm" method="post">
+                <button type="submit" class="v-btn v-btn--danger">Delete User</button>
+            </form>
+        </div>
+    </div>
+
+<script th:inline="javascript">
+    var csrfParamName = /*[[${_csrf.parameterName}]]*/ "";
+    var csrfToken = /*[[${_csrf.token}]]*/ "";
+
+    function openDeleteModal(id, name) {
+        const nameElement = document.getElementById('modalUserName');
+        if (nameElement) nameElement.textContent = name;
+
+        const idElement = document.getElementById('modalUserId');
+        if (idElement) idElement.textContent = id;
+
+        const form = document.getElementById('deleteForm');
+        if (form) {
+            form.action = '/admin/users/' + id + '/delete';
+            // Clean up and re-add CSRF
+            form.querySelectorAll('input[type="hidden"]').forEach(input => input.remove());
+            const csrfInput = document.createElement('input');
+            csrfInput.type = "hidden";
+            csrfInput.name = csrfParamName;
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+        }
+
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+            // Focus the 'Cancel' button or 'Confirm' for accessibility
+            const cancelBtn = modal.querySelector('.v-btn--ghost');
+            if (cancelBtn) cancelBtn.focus();
+        }
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    // Listen for clicking outside the modal content to close it
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) closeModal();
+    }
+
+    // Listen for Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+</script>
+</div>

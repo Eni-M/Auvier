@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('View Product', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin" th:object="${product}">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1" th:text="*{name}">Product</h1>
+            <p class="v-muted">Preview product details and manage next actions.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/products}">Back</a>
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/products/{id}/edit(id=*{id})}">Edit</a>
+            <a class="v-btn v-btn--primary" th:href="@{/admin/products/{id}/variants(id=*{id})}">Variants</a>
+            <a class="v-btn v-btn--ghost" th:href="@{/product/{slug}(slug=*{slug})}" target="_blank">Public View</a>
+            <button type="button" class="v-btn v-btn--danger" onclick="openDeleteModal()">Delete</button>
+
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/products}">Products</a>
+        <span class="v-sep">/</span>
+        <span>View</span>
+    </nav>
+
+    <!-- Details -->
+    <div class="v-stack">
+        <div class="v-card">
+            <div class="v-card__header">
+                <div>
+                    <h2 class="v-card__title">Details</h2>
+                    <p class="v-card__subtitle">Core fields. Stock is managed in variants.</p>
+                </div>
+
+            </div>
+
+            <div class="v-card__body">
+                <!-- TODO: Uncomment when Category is implemented -->
+                <!-- <th:block th:replace="~{admin/shared/_helper :: rowHtml('Category', *{category != null ? category.name : '-'})}"></th:block> -->
+                <th:block th:replace="~{admin/shared/_helper :: rowHtml('Slug', *{slug})}"></th:block>
+                <th:block th:replace="~{admin/shared/_helper :: rowHtml('Status', *{active ? 'Active' : 'Disabled'})}"></th:block>
+                <th:block th:replace="~{admin/shared/_helper :: rowHtml('Description', *{#strings.isEmpty(description) ? '-' : description})}"></th:block>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="v-modal" style="display:none;">
+        <div class="v-modal__content">
+            <h3 class="v-modal__title">Confirm deletion</h3>
+            <p class="v-muted" style="margin-bottom: 12px;">This action cannot be undone.</p>
+
+            <div class="v-kv" style="margin-bottom: 8px;">
+                <div class="v-kv__label">Product</div>
+                <div class="v-kv__value v-strong" th:text="*{name}">Product Name</div>
+            </div>
+
+            <div class="v-kv" style="margin-bottom: 16px;">
+                <div class="v-kv__label">ID</div>
+                <div class="v-kv__value v-mono" th:text="*{id}">0</div>
+            </div>
+
+            <div class="v-modal__warning" style="margin-bottom: 20px;">
+                Deleting removes this product permanently (and anything dependent on it).
+            </div>
+
+            <div class="v-modal__actions">
+                <button type="button" onclick="closeModal()" class="v-btn v-btn--ghost">Cancel</button>
+                <form th:action="@{/admin/products/{id}/delete(id=*{id})}" method="post" style="display: inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="v-btn v-btn--danger">Delete Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+
+</div>
+</html>
+
+

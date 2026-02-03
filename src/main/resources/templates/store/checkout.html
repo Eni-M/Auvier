@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Checkout')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <section class="au-section">
+        <div class="au-container">
+            <h1 class="au-checkout-title">Checkout</h1>
+
+            <div class="au-checkout-grid">
+                <!-- Checkout Form -->
+                <div class="au-checkout-form">
+                    <form id="checkoutForm">
+                        <!-- Contact Information -->
+                        <div class="au-checkout-section">
+                            <h2>Contact Information</h2>
+                            <div class="au-form-group">
+                                <label class="au-form-label">Email</label>
+                                <input type="email" class="au-form-input" name="email" id="email" required
+                                       th:value="${#authentication.principal?.username}">
+                            </div>
+                            <div class="au-form-group">
+                                <label class="au-form-label">Phone</label>
+                                <input type="tel" class="au-form-input" name="phone" id="phone" placeholder="+1 (555) 000-0000">
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="au-checkout-section">
+                            <h2>Shipping Address</h2>
+                            <div class="au-form-row">
+                                <div class="au-form-group">
+                                    <label class="au-form-label">First Name *</label>
+                                    <input type="text" class="au-form-input" name="firstName" id="firstName" required>
+                                </div>
+                                <div class="au-form-group">
+                                    <label class="au-form-label">Last Name *</label>
+                                    <input type="text" class="au-form-input" name="lastName" id="lastName" required>
+                                </div>
+                            </div>
+                            <div class="au-form-group">
+                                <label class="au-form-label">Address *</label>
+                                <input type="text" class="au-form-input" name="address" id="address" required placeholder="Street address">
+                            </div>
+                            <div class="au-form-group">
+                                <label class="au-form-label">Apartment, suite, etc. (optional)</label>
+                                <input type="text" class="au-form-input" name="apartment" id="apartment">
+                            </div>
+                            <div class="au-form-row au-form-row--3">
+                                <div class="au-form-group">
+                                    <label class="au-form-label">City *</label>
+                                    <input type="text" class="au-form-input" name="city" id="city" required>
+                                </div>
+                                <div class="au-form-group">
+                                    <label class="au-form-label">State *</label>
+                                    <input type="text" class="au-form-input" name="state" id="state" required>
+                                </div>
+                                <div class="au-form-group">
+                                    <label class="au-form-label">ZIP Code *</label>
+                                    <input type="text" class="au-form-input" name="zipCode" id="zipCode" required>
+                                </div>
+                            </div>
+                            <div class="au-form-group">
+                                <label class="au-form-label">Country *</label>
+                                <select class="au-form-input" name="country" id="country" required>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="AU">Australia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Payment -->
+                        <div class="au-checkout-section">
+                            <h2>Payment</h2>
+                            <p class="au-checkout-secure"><i class="bi bi-shield-lock"></i> All transactions are secure and encrypted</p>
+
+                            <!-- Stripe Elements will be mounted here -->
+                            <div id="payment-element" class="au-payment-element"></div>
+                            <div id="payment-errors" class="au-form-error" role="alert"></div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="au-btn au-btn--primary au-btn--lg au-btn--full">
+                            <span id="btnText">Complete Order</span>
+                            <span id="btnSpinner" class="au-spinner" style="display: none;"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="au-checkout-summary">
+                    <div class="au-checkout-summary-card">
+                        <h3>Order Summary</h3>
+
+                        <div id="cartItems" class="au-checkout-items">
+                            <!-- Cart items will be populated by JavaScript -->
+                            <p class="au-checkout-empty">Your cart is empty</p>
+                        </div>
+
+                        <div class="au-checkout-totals">
+                            <div class="au-checkout-row">
+                                <span>Subtotal</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <div class="au-checkout-row">
+                                <span>Shipping</span>
+                                <span id="shipping">Calculated at next step</span>
+                            </div>
+                            <div class="au-checkout-row au-checkout-row--total">
+                                <span>Total</span>
+                                <span id="total">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+
+<!-- Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<script th:inline="javascript">
+    const stripePublicKey = /*[[${stripePublicKey}]]*/ '';
+    const stripe = Stripe(stripePublicKey);
+    let elements;
+    let paymentElement;
+    let currentOrderId;
+
+    // Cart functionality (localStorage)
+    function getCart() {
+        const cart = localStorage.getItem('auvier_cart');
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    function renderCartItems() {
+        const cart = getCart();
+        const container = document.getElementById('cartItems');
+
+        if (cart.length === 0) {
+            container.innerHTML = '<p class="au-checkout-empty">Your cart is empty</p>';
+            return;
+        }
+
+        let subtotal = 0;
+        let html = '';
+
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            subtotal += itemTotal;
+            html += `
+                <div class="au-checkout-item">
+                    <div class="au-checkout-item-image">
+                        <img src="${item.imageUrl || 'https://via.placeholder.com/80'}" alt="${item.productName}">
+                        <span class="au-checkout-item-qty">${item.quantity}</span>
+                    </div>
+                    <div class="au-checkout-item-details">
+                        <p class="au-checkout-item-name">${item.productName}</p>
+                        <p class="au-checkout-item-variant">${item.size} / ${item.color}</p>
+                    </div>
+                    <div class="au-checkout-item-price">$${itemTotal.toFixed(2)}</div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+        document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+        document.getElementById('total').textContent = '$' + subtotal.toFixed(2);
+    }
+
+    // Initialize Stripe Elements after creating order
+    async function initializePayment(clientSecret) {
+        elements = stripe.elements({ clientSecret });
+        paymentElement = elements.create('payment');
+        paymentElement.mount('#payment-element');
+    }
+
+    // Form submission
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnSpinner.style.display = 'inline-block';
+
+        try {
+            // If we haven't created an order yet, create one
+            if (!currentOrderId) {
+                const cart = getCart();
+                const formData = new FormData(e.target);
+
+                const orderData = {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    address: formData.get('address'),
+                    apartment: formData.get('apartment'),
+                    city: formData.get('city'),
+                    state: formData.get('state'),
+                    zipCode: formData.get('zipCode'),
+                    country: formData.get('country'),
+                    cartItems: cart
+                };
+
+                const response = await fetch('/checkout/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+
+                currentOrderId = result.orderId;
+                await initializePayment(result.clientSecret);
+            }
+
+            // Confirm payment with Stripe
+            const { error, paymentIntent } = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    return_url: window.location.origin + '/checkout/success?orderId=' + currentOrderId,
+                },
+            });
+
+            if (error) {
+                document.getElementById('payment-errors').textContent = error.message;
+            }
+
+        } catch (error) {
+            document.getElementById('payment-errors').textContent = error.message;
+        } finally {
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline';
+            btnSpinner.style.display = 'none';
+        }
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', renderCartItems);
+</script>
+
+<style>
+    .au-checkout-title {
+        font-family: var(--au-font-display);
+        font-size: 2rem;
+        font-weight: 400;
+        text-align: center;
+        margin-bottom: var(--au-space-3xl);
+    }
+    .au-checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: var(--au-space-4xl);
+        align-items: start;
+    }
+    .au-checkout-section {
+        margin-bottom: var(--au-space-2xl);
+        padding-bottom: var(--au-space-2xl);
+        border-bottom: 1px solid var(--au-gray-light);
+    }
+    .au-checkout-section h2 {
+        font-family: var(--au-font-display);
+        font-size: 1.25rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-lg);
+    }
+    .au-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--au-space-lg); }
+    .au-form-row--3 { grid-template-columns: 1fr 1fr 1fr; }
+    .au-checkout-secure {
+        font-size: 0.875rem;
+        color: var(--au-gray);
+        margin-bottom: var(--au-space-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--au-space-sm);
+    }
+    .au-payment-element {
+        padding: var(--au-space-lg);
+        border: 1px solid var(--au-gray-light);
+        border-radius: 4px;
+        margin-bottom: var(--au-space-lg);
+    }
+    .au-checkout-summary-card {
+        background: var(--au-cream);
+        padding: var(--au-space-xl);
+        position: sticky;
+        top: 100px;
+    }
+    .au-checkout-summary-card h3 {
+        font-family: var(--au-font-display);
+        font-size: 1.25rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-lg);
+        padding-bottom: var(--au-space-md);
+        border-bottom: 1px solid var(--au-gray-light);
+    }
+    .au-checkout-items { margin-bottom: var(--au-space-lg); }
+    .au-checkout-empty { color: var(--au-gray); font-size: 0.9375rem; }
+    .au-checkout-item {
+        display: flex;
+        gap: var(--au-space-md);
+        padding: var(--au-space-md) 0;
+        border-bottom: 1px solid var(--au-gray-light);
+    }
+    .au-checkout-item-image {
+        position: relative;
+        width: 64px;
+        height: 80px;
+        flex-shrink: 0;
+    }
+    .au-checkout-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .au-checkout-item-qty {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 20px;
+        height: 20px;
+        background: var(--au-black);
+        color: var(--au-white);
+        border-radius: 50%;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .au-checkout-item-details { flex: 1; }
+    .au-checkout-item-name { font-weight: 500; font-size: 0.9375rem; }
+    .au-checkout-item-variant { font-size: 0.8125rem; color: var(--au-gray); }
+    .au-checkout-item-price { font-weight: 500; }
+    .au-checkout-totals { padding-top: var(--au-space-md); }
+    .au-checkout-row {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--au-space-sm) 0;
+        font-size: 0.9375rem;
+    }
+    .au-checkout-row--total {
+        font-weight: 600;
+        font-size: 1.125rem;
+        border-top: 1px solid var(--au-gray-light);
+        margin-top: var(--au-space-md);
+        padding-top: var(--au-space-md);
+    }
+    .au-spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid transparent;
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 992px) {
+        .au-checkout-grid { grid-template-columns: 1fr; }
+        .au-checkout-summary-card { position: static; }
+    }
+    @media (max-width: 576px) {
+        .au-form-row, .au-form-row--3 { grid-template-columns: 1fr; }
+    }
+</style>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('Order Details', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Order #<span th:text="${order.id}">1</span></h1>
+            <p class="v-muted">View order details and manage fulfillment.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a th:href="@{/admin/orders}" class="v-btn v-btn--ghost">← Back to Orders</a>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/orders}">Orders</a>
+        <span class="v-sep">/</span>
+        <span th:text="'#' + ${order.id}">#1</span>
+    </nav>
+
+    <!-- Alerts -->
+    <div class="v-stack" th:if="${error}">
+        <div class="v-alert v-alert--danger">
+            <div class="v-alert__text" th:text="${error}"></div>
+            <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    </div>
+
+    <div class="v-stack" th:if="${success}">
+        <div class="v-alert v-alert--success">
+            <div class="v-alert__text" th:text="${success}"></div>
+            <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Order Summary Card -->
+        <div class="col-lg-8">
+            <div class="v-card">
+                <div class="v-card__header">
+                    <div>
+                        <h2 class="v-card__title">Order Items</h2>
+                        <p class="v-card__subtitle" th:text="${order.itemCount + ' item(s)'}">0 items</p>
+                    </div>
+                </div>
+
+                <div class="v-tablewrap">
+                    <table class="v-table">
+                        <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Variant</th>
+                            <th>SKU</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-end">Unit Price</th>
+                            <th class="text-end">Subtotal</th>
+                            <th th:if="${order.status.name() == 'PENDING'}" class="text-end">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${order.items}">
+                            <td>
+                                <div class="v-strong" th:text="${item.productName}">Product Name</div>
+                            </td>
+                            <td>
+                                <span th:if="${item.color}" th:text="${item.color}">Color</span>
+                                <span th:if="${item.size}"> / </span>
+                                <span th:if="${item.size}" th:text="${item.size}">Size</span>
+                            </td>
+                            <td class="v-mono" th:text="${item.sku}">SKU-001</td>
+                            <td class="text-center" th:text="${item.quantity}">1</td>
+                            <td class="text-end" th:text="${'$' + #numbers.formatDecimal(item.unitPrice, 1, 2)}">$0.00</td>
+                            <td class="text-end v-strong" th:text="${'$' + #numbers.formatDecimal(item.subtotal, 1, 2)}">$0.00</td>
+                            <td th:if="${order.status.name() == 'PENDING'}" class="text-end">
+                                <form th:action="@{/admin/orders/{orderId}/items/{itemId}/remove(orderId=${order.id}, itemId=${item.id})}"
+                                      method="post" style="display: inline;">
+                                    <button type="submit" class="v-btn v-btn--ghost v-btn--sm v-btn--danger"
+                                            onclick="return confirm('Remove this item?')">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-end v-strong">Total:</td>
+                            <td class="text-end v-strong" th:text="${'$' + #numbers.formatDecimal(order.totalAmount, 1, 2)}">$0.00</td>
+                            <td th:if="${order.status.name() == 'PENDING'}"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Info Sidebar -->
+        <div class="col-lg-4">
+            <!-- Status Card -->
+            <div class="v-card mb-4">
+                <div class="v-card__header">
+                    <h2 class="v-card__title">Status</h2>
+                </div>
+                <div class="v-card__body">
+                    <div class="mb-3">
+                        <span class="v-badge v-badge--lg"
+                              th:classappend="${order.status.name() == 'DELIVERED'} ? ' v-badge--ok' :
+                                              (${order.status.name() == 'CANCELLED'} ? ' v-badge--danger' :
+                                              (${order.status.name() == 'SHIPPED'} ? ' v-badge--info' :
+                                              (${order.status.name() == 'PAID'} ? ' v-badge--success' : ' v-badge--muted')))"
+                              th:text="${order.status}">
+                            PENDING
+                        </span>
+                    </div>
+
+                    <!-- Quick Status Actions -->
+                    <div class="v-stack-sm">
+                        <form th:if="${order.status.name() == 'PENDING'}"
+                              th:action="@{/admin/orders/{id}/confirm(id=${order.id})}" method="post">
+                            <button type="submit" class="v-btn v-btn--primary w-100">Confirm Order</button>
+                        </form>
+
+                        <form th:if="${order.status.name() == 'CREATED' or order.status.name() == 'PENDING'}"
+                              th:action="@{/admin/orders/{id}/mark-paid(id=${order.id})}" method="post">
+                            <button type="submit" class="v-btn v-btn--success w-100">Mark as Paid</button>
+                        </form>
+
+                        <form th:if="${order.status.name() == 'PAID'}"
+                              th:action="@{/admin/orders/{id}/mark-shipped(id=${order.id})}" method="post">
+                            <button type="submit" class="v-btn v-btn--info w-100">Mark as Shipped</button>
+                        </form>
+
+                        <form th:if="${order.status.name() == 'SHIPPED'}"
+                              th:action="@{/admin/orders/{id}/mark-delivered(id=${order.id})}" method="post">
+                            <button type="submit" class="v-btn v-btn--ok w-100">Mark as Delivered</button>
+                        </form>
+
+                        <form th:if="${order.status.name() != 'DELIVERED' and order.status.name() != 'CANCELLED'}"
+                              th:action="@{/admin/orders/{id}/cancel(id=${order.id})}" method="post">
+                            <button type="submit" class="v-btn v-btn--danger v-btn--ghost w-100"
+                                    onclick="return confirm('Cancel this order?')">Cancel Order</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Card -->
+            <div class="v-card mb-4">
+                <div class="v-card__header">
+                    <h2 class="v-card__title">Customer</h2>
+                </div>
+                <div class="v-card__body">
+                    <p class="v-strong" th:text="${order.user.username}">username</p>
+                    <p class="v-muted" th:text="${order.user.email}">email@example.com</p>
+                    <p th:if="${order.user.firstName or order.user.lastName}"
+                       th:text="${(order.user.firstName ?: '') + ' ' + (order.user.lastName ?: '')}">Full Name</p>
+                </div>
+            </div>
+
+            <!-- Shipping Card -->
+            <div class="v-card mb-4">
+                <div class="v-card__header">
+                    <h2 class="v-card__title">Shipping</h2>
+                </div>
+                <div class="v-card__body">
+                    <p th:text="${order.shippingAddress ?: 'No address provided'}" style="white-space: pre-line;">
+                        123 Main St, City
+                    </p>
+                </div>
+            </div>
+
+            <!-- Payment Card -->
+            <div class="v-card mb-4">
+                <div class="v-card__header">
+                    <h2 class="v-card__title">Payment</h2>
+                </div>
+                <div class="v-card__body">
+                    <p><strong>Method:</strong> <span th:text="${order.paymentMethod ?: 'N/A'}">Credit Card</span></p>
+                    <p><strong>Status:</strong> <span th:text="${order.paymentStatus ?: 'N/A'}">Pending</span></p>
+                    <p th:if="${order.transactionId}"><strong>Transaction:</strong>
+                        <span class="v-mono" th:text="${order.transactionId}">TXN-123</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timestamps Card -->
+            <div class="v-card">
+                <div class="v-card__header">
+                    <h2 class="v-card__title">Timeline</h2>
+                </div>
+                <div class="v-card__body">
+                    <p><strong>Created:</strong>
+                        <span th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy HH:mm')}">Jan 01, 2026</span>
+                    </p>
+                    <p th:if="${order.updatedAt}"><strong>Updated:</strong>
+                        <span th:text="${#temporals.format(order.updatedAt, 'MMM dd, yyyy HH:mm')}">Jan 01, 2026</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

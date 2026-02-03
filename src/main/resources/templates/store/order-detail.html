@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Order Details')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Breadcrumb -->
+    <nav class="au-breadcrumb">
+        <div class="au-container">
+            <a th:href="@{/}">Home</a>
+            <span>/</span>
+            <a th:href="@{/profile}">Account</a>
+            <span>/</span>
+            <a th:href="@{/orders}">Orders</a>
+            <span>/</span>
+            <span th:text="'#' + ${order.id}">Order</span>
+        </div>
+    </nav>
+
+    <section class="au-section">
+        <div class="au-container">
+            <div class="au-order-detail">
+                <!-- Order Header -->
+                <div class="au-order-detail__header">
+                    <div>
+                        <h1 class="au-order-detail__title">Order #<span th:text="${order.id}">123456</span></h1>
+                        <p class="au-order-detail__date">Placed on <span th:text="${#temporals.format(order.createdAt, 'MMMM d, yyyy')}">January 1, 2026</span></p>
+                    </div>
+                    <span class="au-order-detail__status" th:classappend="'au-status--' + ${order.status.toString().toLowerCase()}" th:text="${order.status}">Pending</span>
+                </div>
+
+                <div class="au-order-detail__grid">
+                    <!-- Order Items -->
+                    <div class="au-order-detail__items">
+                        <h2>Items</h2>
+                        <div class="au-order-items">
+                            <div class="au-order-item" th:each="item : ${order.items}">
+                                <div class="au-order-item__image">
+                                    <img th:src="${item.imageUrl != null ? item.imageUrl : 'https://via.placeholder.com/100x120'}"
+                                         th:alt="${item.productName}">
+                                </div>
+                                <div class="au-order-item__info">
+                                    <h4 th:text="${item.productName}">Product Name</h4>
+                                    <p class="au-order-item__variant" th:text="${item.size + ' / ' + item.color}">Size / Color</p>
+                                    <p class="au-order-item__qty">Qty: <span th:text="${item.quantity}">1</span></p>
+                                </div>
+                                <div class="au-order-item__price">
+                                    <span th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}">$99.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="au-order-detail__summary">
+                        <h2>Summary</h2>
+                        <div class="au-order-summary">
+                            <div class="au-order-summary__row">
+                                <span>Subtotal</span>
+                                <span th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}">$299.00</span>
+                            </div>
+                            <div class="au-order-summary__row">
+                                <span>Shipping</span>
+                                <span>Free</span>
+                            </div>
+                            <div class="au-order-summary__row au-order-summary__row--total">
+                                <span>Total</span>
+                                <span th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}">$299.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="au-order-address" th:if="${order.shippingAddress != null}">
+                            <h3>Shipping Address</h3>
+                            <p th:utext="${#strings.replace(order.shippingAddress, T(System).lineSeparator(), '&lt;br&gt;')}">
+                                123 Main St<br>City, ST 12345
+                            </p>
+                        </div>
+
+                        <!-- Payment Info -->
+                        <div class="au-order-payment" th:if="${order.paymentStatus != null}">
+                            <h3>Payment</h3>
+                            <p>Status: <span th:text="${order.paymentStatus}">Paid</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="au-order-detail__actions">
+                    <a th:href="@{/orders}" class="au-btn au-btn--secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Orders
+                    </a>
+                    <a th:href="@{/contact}" class="au-btn au-btn--secondary">
+                        <i class="bi bi-envelope"></i> Need Help?
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-order-detail__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: var(--au-space-2xl);
+        padding-bottom: var(--au-space-xl);
+        border-bottom: 1px solid var(--au-gray-light);
+    }
+    .au-order-detail__title {
+        font-family: var(--au-font-display);
+        font-size: 2rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-xs);
+    }
+    .au-order-detail__date {
+        color: var(--au-gray);
+    }
+    .au-order-detail__status {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 6px 16px;
+        border-radius: 2px;
+    }
+    .au-status--pending { background: #fef3c7; color: #92400e; }
+    .au-status--paid { background: #d1fae5; color: #065f46; }
+    .au-status--processing { background: #dbeafe; color: #1e40af; }
+    .au-status--shipped { background: #e0e7ff; color: #3730a3; }
+    .au-status--delivered { background: #d1fae5; color: #065f46; }
+    .au-status--cancelled { background: #fee2e2; color: #991b1b; }
+    .au-order-detail__grid {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: var(--au-space-3xl);
+        margin-bottom: var(--au-space-3xl);
+    }
+    .au-order-detail__items h2,
+    .au-order-detail__summary h2 {
+        font-family: var(--au-font-display);
+        font-size: 1.25rem;
+        font-weight: 400;
+        margin-bottom: var(--au-space-lg);
+    }
+    .au-order-items {
+        display: flex;
+        flex-direction: column;
+        gap: var(--au-space-lg);
+    }
+    .au-order-item {
+        display: grid;
+        grid-template-columns: 80px 1fr auto;
+        gap: var(--au-space-lg);
+        padding-bottom: var(--au-space-lg);
+        border-bottom: 1px solid var(--au-gray-light);
+    }
+    .au-order-item:last-child {
+        border-bottom: none;
+    }
+    .au-order-item__image img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+    }
+    .au-order-item__info h4 {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+    .au-order-item__variant,
+    .au-order-item__qty {
+        font-size: 0.875rem;
+        color: var(--au-gray);
+    }
+    .au-order-item__price {
+        font-weight: 600;
+    }
+    .au-order-summary {
+        background: var(--au-cream);
+        padding: var(--au-space-lg);
+        margin-bottom: var(--au-space-xl);
+    }
+    .au-order-summary__row {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--au-space-sm) 0;
+    }
+    .au-order-summary__row--total {
+        font-weight: 600;
+        font-size: 1.125rem;
+        border-top: 1px solid var(--au-gray-light);
+        margin-top: var(--au-space-sm);
+        padding-top: var(--au-space-md);
+    }
+    .au-order-address,
+    .au-order-payment {
+        margin-bottom: var(--au-space-lg);
+    }
+    .au-order-address h3,
+    .au-order-payment h3 {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--au-space-sm);
+        color: var(--au-gray);
+    }
+    .au-order-address p,
+    .au-order-payment p {
+        font-size: 0.9375rem;
+        line-height: 1.6;
+    }
+    .au-order-detail__actions {
+        display: flex;
+        gap: var(--au-space-md);
+        padding-top: var(--au-space-xl);
+        border-top: 1px solid var(--au-gray-light);
+    }
+    @media (max-width: 768px) {
+        .au-order-detail__grid {
+            grid-template-columns: 1fr;
+        }
+        .au-order-detail__header {
+            flex-direction: column;
+            gap: var(--au-space-md);
+        }
+    }
+</style>
+</body>
+</html>

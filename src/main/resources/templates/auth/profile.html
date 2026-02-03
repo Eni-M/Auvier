@@ -1,58 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Profile')}"></head>
+<head th:replace="~{store/fragments/_layout :: head('My Account')}"></head>
+
 <body>
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
 
-<main class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm rounded-3">
-        <div class="card-body p-4">
-
-          <h2 class="card-title text-center mb-4">
-            <i class="bi bi-person-circle"></i> Profile
-          </h2>
-
-          <!-- Username -->
-          <div class="mb-3">
-            <label class="form-label fw-bold" for="username">Username:</label>
-            <p id="username" class="form-control-plaintext" th:text="${user.username}">Username</p>
-          </div>
-
-          <!-- Email -->
-          <div class="mb-3">
-            <label class="form-label fw-bold" for="email">Email:</label>
-            <p id="email" class="form-control-plaintext" th:text="${user.email}">Email</p>
-          </div>
-
-          <!-- Full Name -->
-          <div class="mb-3">
-            <label class="form-label fw-bold" for="fullName">Full Name:</label>
-            <p id="fullName" class="form-control-plaintext" th:text="${user.fullName}">Full Name</p>
-          </div>
-
-          <!-- Role (optional) -->
-          <div class="mb-3" th:if="${user.role}">
-            <label class="form-label fw-bold" for="role">Role:</label>
-            <p id="role" class="form-control-plaintext" th:text="${user.role}">Role</p>
-          </div>
-
-          <!-- Actions -->
-          <div class="d-flex justify-content-between mt-4">
-            <form th:action="@{/logout}" method="post">
-              <button type="submit" class="btn btn-outline-danger">Logout</button>
-            </form>
-            <a th:href="@{/profile/edit}" class="btn btn-primary">Edit Profile</a>
-          </div>
-
+<main class="au-section">
+    <div class="au-container au-container--sm">
+        <div class="au-section-header" style="margin-bottom: var(--au-space-2xl);">
+            <h1 class="au-section-header__title">My Account</h1>
         </div>
-      </div>
+
+        <div class="au-auth-card" style="max-width: 100%;">
+            <!-- Username -->
+            <div class="au-profile-row">
+                <span class="au-profile-label">Username</span>
+                <span class="au-profile-value" th:text="${user.username}">Username</span>
+            </div>
+
+            <!-- Email -->
+            <div class="au-profile-row">
+                <span class="au-profile-label">Email</span>
+                <span class="au-profile-value" th:text="${user.email}">email@example.com</span>
+            </div>
+
+            <!-- Full Name -->
+            <div class="au-profile-row">
+                <span class="au-profile-label">Full Name</span>
+                <span class="au-profile-value" th:text="${user.fullName ?: 'Not provided'}">Full Name</span>
+            </div>
+
+            <!-- Role (optional) -->
+            <div class="au-profile-row" th:if="${user.role}">
+                <span class="au-profile-label">Account Type</span>
+                <span class="au-profile-value" th:text="${user.role}">Customer</span>
+            </div>
+
+            <!-- Actions -->
+            <div style="display: flex; justify-content: space-between; gap: var(--au-space-md); margin-top: var(--au-space-xl); padding-top: var(--au-space-xl); border-top: 1px solid var(--au-gray-light);">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="au-btn au-btn--secondary">Sign Out</button>
+                </form>
+                <a th:href="@{/profile/edit}" class="au-btn au-btn--primary">Edit Profile</a>
+            </div>
+        </div>
     </div>
-  </div>
 </main>
 
-<footer th:replace="~{fragments/layout :: footer}"></footer>
-<div th:replace="~{fragments/layout :: scripts}"></div>
+<style>
+    .au-profile-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--au-space-md) 0;
+        border-bottom: 1px solid var(--au-gray-light);
+    }
+    .au-profile-row:last-of-type {
+        border-bottom: none;
+    }
+    .au-profile-label {
+        font-size: var(--au-text-sm);
+        font-weight: 500;
+        color: var(--au-gray);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .au-profile-value {
+        font-size: var(--au-text-base);
+        color: var(--au-black);
+    }
+</style>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
 </body>
 </html>

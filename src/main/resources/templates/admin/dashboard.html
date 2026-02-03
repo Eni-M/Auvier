@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/shared/_layout::layout('Auvier Admin', ~{::div#content}, null, null)}">
+<head>
+    <title>Auvier Admin</title>
+</head>
+<body>
+
+<div id="content">
+    <div class="v-admin">
+        <div class="v-pagehead">
+            <div>
+                <h1 class="v-h1">Admin Dashboard</h1>
+                <p class="v-muted">Auvier Atlas — Manage your store</p>
+            </div>
+        </div>
+
+        <div class="v-dashboard-grid">
+            <a class="v-card v-dashboard-card" th:href="@{/admin/categories}">
+                <div class="v-card__body">
+                    <div class="v-dashboard-card__header">
+                        <span class="v-dashboard-card__icon"><i class="bi bi-grid-3x3-gap"></i></span>
+                        <h2 class="v-dashboard-card__title">Categories</h2>
+                    </div>
+                    <p class="v-dashboard-card__desc">View and manage product categories</p>
+                </div>
+            </a>
+
+            <a class="v-card v-dashboard-card" th:href="@{/admin/products}">
+                <div class="v-card__body">
+                    <div class="v-dashboard-card__header">
+                        <span class="v-dashboard-card__icon"><i class="bi bi-box-seam"></i></span>
+                        <h2 class="v-dashboard-card__title">Products</h2>
+                    </div>
+                    <p class="v-dashboard-card__desc">View and manage products inventory</p>
+                </div>
+            </a>
+
+            <a class="v-card v-dashboard-card" th:href="@{/admin/users}">
+                <div class="v-card__body">
+                    <div class="v-dashboard-card__header">
+                        <span class="v-dashboard-card__icon"><i class="bi bi-people"></i></span>
+                        <h2 class="v-dashboard-card__title">Users</h2>
+                    </div>
+                    <p class="v-dashboard-card__desc">Manage user accounts</p>
+                </div>
+            </a>
+
+            <a class="v-card v-dashboard-card" th:href="@{/admin/orders}">
+                <div class="v-card__body">
+                    <div class="v-dashboard-card__header">
+                        <span class="v-dashboard-card__icon"><i class="bi bi-receipt"></i></span>
+                        <h2 class="v-dashboard-card__title">Orders</h2>
+                    </div>
+                    <p class="v-dashboard-card__desc">View and manage customer orders</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+

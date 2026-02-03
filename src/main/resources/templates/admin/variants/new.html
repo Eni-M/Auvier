@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('New Variant', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin">
+
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">New Variant</h1>
+            <p class="v-muted" th:text="'Product: ' + ${product.name}">Product</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/products/{id}/variants(id=${product.id})}">Back</a>
+        </div>
+    </div>
+
+    <div class="v-stack">
+        <th:block th:replace="~{admin/variants/_newOrEdit :: newOrEditForm(@{/admin/products/{id}/variants/new(id=${product.id})}, ${productVariantDto}, ${sizes})}"></th:block>
+    </div>
+
+</div>
+</html>

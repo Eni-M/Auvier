@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('View User', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin" th:object="${userDto}">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1" th:text="*{fullName != null ? fullName : username}">User Name</h1>
+            <p class="v-muted">User details.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/users}">Back</a>
+            <a class="v-btn v-btn--primary" th:href="@{/admin/users/{id}/edit(id=*{id})}">Edit</a>
+            <button type="button"
+                    class="v-btn v-btn--danger"
+                    th:if="${canDelete}"
+                    onclick="openDeleteModal()">
+                Delete
+            </button>
+        </div>
+    </div>
+
+    <!-- User Details Card -->
+    <div class="v-card">
+        <div class="v-card__body">
+            <th:block th:replace="~{admin/shared/_helper :: rowHtml('ID', *{id})}"/>
+            <th:block th:replace="~{admin/shared/_helper :: rowHtml('Username', *{username})}"/>
+            <th:block th:replace="~{admin/shared/_helper :: rowHtml('Email', *{email})}"/>
+            <th:block th:replace="~{admin/shared/_helper :: rowHtml('Role', *{role})}"/>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="v-modal" style="display:none;" th:if="${canDelete}">
+        <div class="v-modal__content">
+            <h3 class="v-modal__title">Confirm Deletion</h3>
+            <p class="v-muted" style="margin-bottom: 12px;">This action cannot be undone.</p>
+
+            <div class="v-kv" style="margin-bottom: 8px;">
+                <div class="v-kv__label">User</div>
+                <div class="v-kv__value v-strong" th:text="*{username}">Username</div>
+            </div>
+
+            <div class="v-kv" style="margin-bottom: 16px;">
+                <div class="v-kv__label">ID</div>
+                <div class="v-kv__value v-mono" th:text="*{id}">0</div>
+            </div>
+
+            <div class="v-modal__warning" style="margin-bottom: 20px;">
+                Deleting removes this user permanently. Their orders and data will be affected.
+            </div>
+
+            <div class="v-modal__actions">
+                <button type="button" onclick="closeModal()" class="v-btn v-btn--ghost">Cancel</button>
+                <form th:action="@{/admin/users/{id}/delete(id=*{id})}" method="post" style="display: inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="v-btn v-btn--danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:if="${canDelete}">
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</div>
+</html>

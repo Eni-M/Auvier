@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('View Category', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin" th:object="${category}">
+
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1" th:text="*{name}">Category</h1>
+            <p class="v-muted">Category details and actions.</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/categories}">Back</a>
+            <a class="v-btn v-btn--primary" th:href="@{/admin/categories/{id}/edit(id=*{id})}">Edit</a>
+
+            <button type="button"
+                    class="v-btn v-btn--danger"
+                    onclick="openDeleteModal()">
+                Delete
+            </button>
+        </div>
+    </div>
+
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/categories}">Categories</a>
+        <span class="v-sep">/</span>
+        <span>View</span>
+    </nav>
+
+    <div class="v-stack">
+        <div class="v-card">
+            <div class="v-card__header">
+                <div>
+                    <h2 class="v-card__title">Details</h2>
+                    <p class="v-card__subtitle">Core fields for this category.</p>
+                </div>
+            </div>
+
+            <div class="v-card__body">
+                <th:block th:replace="~{admin/shared/_helper :: rowHtml('ID', *{id})}"></th:block>
+                <th:block th:replace="~{admin/shared/_helper :: rowHtml('Name', *{name})}"></th:block>
+                <th:block th:replace="~{admin/shared/_helper :: rowHtml('Slug', *{slug})}"></th:block>
+                <th:block th:replace="~{admin/shared/_helper :: rowHtml('Status', *{active ? 'Active' : 'Disabled'})}"></th:block>
+
+                <!-- Parent Category -->
+                <div class="v-kv">
+                    <div class="v-kv__label">Parent Category</div>
+                    <div class="v-kv__value" th:if="${parentCategory != null}">
+                        <a th:href="@{/admin/categories/{id}/view(id=${parentCategory.id})}"
+                           th:text="${parentCategory.name}"
+                           style="color: var(--c-accent);">Parent</a>
+                    </div>
+                    <div class="v-kv__value v-muted" th:unless="${parentCategory != null}">None (Root Category)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete modal -->
+    <div id="deleteModal" class="v-modal" style="display:none;">
+        <div class="v-modal__content">
+            <h3 class="v-modal__title">Confirm deletion</h3>
+            <p class="v-muted" style="margin-bottom: 12px;">This action cannot be undone.</p>
+
+            <div class="v-kv" style="margin-bottom: 8px;">
+                <div class="v-kv__label">Category</div>
+                <div class="v-kv__value v-strong" th:text="*{name}">Category Name</div>
+            </div>
+
+            <div class="v-kv" style="margin-bottom: 16px;">
+                <div class="v-kv__label">ID</div>
+                <div class="v-kv__value v-mono" th:text="*{id}">0</div>
+            </div>
+
+            <div class="v-modal__warning" style="margin-bottom: 20px;">
+                Deleting this category may break products that reference it.
+            </div>
+
+            <div class="v-modal__actions">
+                <button type="button" onclick="closeModal()" class="v-btn v-btn--ghost">Cancel</button>
+                <form th:action="@{/admin/categories/{id}/delete(id=*{id})}" method="post" style="display: inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="v-btn v-btn--danger">Delete Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+
+</div>
+</html>
+
+
+

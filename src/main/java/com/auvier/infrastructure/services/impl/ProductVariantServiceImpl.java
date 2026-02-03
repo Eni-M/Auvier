@@ -110,6 +110,11 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     public List<ProductVariantDto> findAll() {
         return List.of();
     }
+
+    @Override
+    public ProductVariantEntity findEntityById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 }
 
 

@@ -13,5 +13,9 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     Optional<CategoryEntity> findByName(String name);
 
     List<CategoryEntity> findByActiveTrue();
+
+    List<CategoryEntity> findByParentIsNullAndActiveTrue();
+
+    List<CategoryEntity> findByParentIsNotNullAndActiveTrue();
 }
 

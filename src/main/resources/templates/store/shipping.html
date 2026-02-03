@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Shipping & Returns')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Page Header -->
+    <section class="au-page-header">
+        <div class="au-container">
+            <h1 class="au-page-title">Shipping & Returns</h1>
+            <p class="au-page-subtitle">Everything you need to know about delivery and returns</p>
+        </div>
+    </section>
+
+    <section class="au-section">
+        <div class="au-container au-container--sm">
+
+            <!-- Shipping -->
+            <div class="au-policy-section">
+                <h2 class="au-policy-title"><i class="bi bi-truck"></i> Shipping Information</h2>
+
+                <h3>Domestic Shipping (United States)</h3>
+                <table class="au-policy-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Delivery Time</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard Shipping</td>
+                            <td>5-7 Business Days</td>
+                            <td>$15 (Free on orders $500+)</td>
+                        </tr>
+                        <tr>
+                            <td>Express Shipping</td>
+                            <td>2-3 Business Days</td>
+                            <td>$25</td>
+                        </tr>
+                        <tr>
+                            <td>Overnight Shipping</td>
+                            <td>Next Business Day</td>
+                            <td>$45</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>International Shipping</h3>
+                <p>We ship to most countries worldwide. International shipping rates are calculated at checkout based on destination and package weight.</p>
+                <ul class="au-policy-list">
+                    <li>Delivery typically takes 7-14 business days</li>
+                    <li>All duties, taxes, and customs fees are the responsibility of the customer</li>
+                    <li>Tracking information provided for all international orders</li>
+                </ul>
+
+                <h3>Order Processing</h3>
+                <p>Orders placed before 2pm EST Monday-Friday are processed the same day. Orders placed after 2pm or on weekends/holidays are processed the next business day.</p>
+            </div>
+
+            <!-- Returns -->
+            <div class="au-policy-section">
+                <h2 class="au-policy-title"><i class="bi bi-arrow-return-left"></i> Return Policy</h2>
+
+                <h3>30-Day Returns</h3>
+                <p>We want you to love your Auvier purchase. If you're not completely satisfied, you may return eligible items within 30 days of delivery.</p>
+
+                <h3>Return Conditions</h3>
+                <ul class="au-policy-list">
+                    <li>Items must be unworn, unwashed, and in original condition</li>
+                    <li>All original tags must be attached</li>
+                    <li>Items must be returned in original packaging</li>
+                    <li>Undergarments, swimwear, and items marked "Final Sale" cannot be returned</li>
+                </ul>
+
+                <h3>How to Return</h3>
+                <ol class="au-policy-list au-policy-list--numbered">
+                    <li>Log into your account and navigate to your order history</li>
+                    <li>Select the item(s) you wish to return and reason for return</li>
+                    <li>Print the prepaid return shipping label</li>
+                    <li>Pack items securely in original packaging</li>
+                    <li>Drop off at any authorized shipping location</li>
+                </ol>
+
+                <h3>Refund Processing</h3>
+                <p>Once we receive and inspect your return, we'll process your refund within 5-7 business days. Refunds are issued to your original payment method. Please allow an additional 3-5 business days for the refund to appear on your statement.</p>
+
+                <div class="au-policy-note">
+                    <strong>Note:</strong> Original shipping charges are non-refundable. Return shipping is complimentary for domestic orders within the US.
+                </div>
+            </div>
+
+            <!-- Exchanges -->
+            <div class="au-policy-section">
+                <h2 class="au-policy-title"><i class="bi bi-arrow-left-right"></i> Exchanges</h2>
+
+                <p>For the fastest service, we recommend returning your item for a refund and placing a new order for your desired size or color. This ensures your new item is reserved and ships immediately.</p>
+
+                <p>If you need assistance with an exchange, please contact our customer service team at <a href="mailto:support@auvier.com">support@auvier.com</a>.</p>
+            </div>
+
+            <!-- Contact -->
+            <div class="au-policy-cta">
+                <h3>Need Assistance?</h3>
+                <p>Our customer service team is available Monday-Friday, 9am-6pm EST.</p>
+                <div class="au-policy-cta-actions">
+                    <a th:href="@{/contact}" class="au-btn au-btn--primary">Contact Us</a>
+                    <a th:href="@{/faq}" class="au-btn au-btn--secondary">View FAQ</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-page-header { text-align: center; padding: var(--au-space-4xl) 0 var(--au-space-2xl); background: var(--au-cream); }
+    .au-page-title { font-family: var(--au-font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-page-subtitle { color: var(--au-gray); }
+    .au-policy-section { margin-bottom: var(--au-space-4xl); }
+    .au-policy-title { font-family: var(--au-font-display); font-size: 1.75rem; font-weight: 400; display: flex; align-items: center; gap: var(--au-space-md); padding-bottom: var(--au-space-md); border-bottom: 1px solid var(--au-gray-light); margin-bottom: var(--au-space-xl); }
+    .au-policy-title i { color: var(--au-gray); }
+    .au-policy-section h3 { font-size: 1.125rem; font-weight: 600; margin: var(--au-space-xl) 0 var(--au-space-md); }
+    .au-policy-section p { color: var(--au-gray-dark); line-height: 1.7; margin-bottom: var(--au-space-md); }
+    .au-policy-table { width: 100%; border-collapse: collapse; margin: var(--au-space-lg) 0; }
+    .au-policy-table th, .au-policy-table td { padding: var(--au-space-md); text-align: left; border-bottom: 1px solid var(--au-gray-light); }
+    .au-policy-table th { font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--au-gray); font-weight: 500; }
+    .au-policy-table td { color: var(--au-gray-dark); }
+    .au-policy-list { margin: var(--au-space-md) 0; padding-left: var(--au-space-xl); color: var(--au-gray-dark); line-height: 1.8; }
+    .au-policy-list li { margin-bottom: var(--au-space-sm); }
+    .au-policy-list--numbered { list-style-type: decimal; }
+    .au-policy-note { background: var(--au-cream); padding: var(--au-space-lg); margin-top: var(--au-space-xl); font-size: 0.9375rem; color: var(--au-gray-dark); }
+    .au-policy-cta { text-align: center; background: var(--au-cream); padding: var(--au-space-3xl); }
+    .au-policy-cta h3 { font-family: var(--au-font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-policy-cta p { color: var(--au-gray-dark); margin-bottom: var(--au-space-lg); }
+    .au-policy-cta-actions { display: flex; gap: var(--au-space-md); justify-content: center; flex-wrap: wrap; }
+</style>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Home')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Hero Section -->
+    <section class="au-hero">
+        <div class="au-hero__media">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&q=80"
+                 alt="Auvier Collection">
+        </div>
+        <div class="au-hero__overlay"></div>
+        <div class="au-hero__content">
+            <p class="au-hero__subtitle">Spring/Summer 2026</p>
+            <h1 class="au-hero__title">The New Chapter</h1>
+            <a th:href="@{/shop}" class="au-btn au-btn--white au-btn--lg">Discover the Collection</a>
+        </div>
+    </section>
+
+    <!-- Split Collections -->
+    <section class="au-hero--split">
+        <a th:href="@{/shop?category=women}" class="au-hero__panel">
+            <div class="au-hero__media">
+                <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=80"
+                     alt="Women's Collection">
+            </div>
+            <div class="au-hero__overlay"></div>
+            <div class="au-hero__panel-content">
+                <h2 class="au-hero__panel-title">Women</h2>
+                <span class="au-link">Shop Now <i class="bi bi-arrow-right"></i></span>
+            </div>
+        </a>
+        <a th:href="@{/shop?category=men}" class="au-hero__panel">
+            <div class="au-hero__media">
+                <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1200&q=80"
+                     alt="Men's Collection">
+            </div>
+            <div class="au-hero__overlay"></div>
+            <div class="au-hero__panel-content">
+                <h2 class="au-hero__panel-title">Men</h2>
+                <span class="au-link">Shop Now <i class="bi bi-arrow-right"></i></span>
+            </div>
+        </a>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="au-section">
+        <div class="au-container">
+            <div class="au-section-header">
+                <p class="au-section-header__eyebrow">Curated Selection</p>
+                <h2 class="au-section-header__title">New Arrivals</h2>
+            </div>
+
+            <div class="au-products" th:if="${featuredProducts != null and !featuredProducts.isEmpty()}">
+                <article class="au-product" th:each="product : ${featuredProducts}">
+                    <div class="au-product__media">
+                        <img class="au-product__image"
+                             th:src="${product.variants != null && !product.variants.isEmpty() && product.variants[0].imageUrl != null} ? ${product.variants[0].imageUrl} : 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80'"
+                             th:alt="${product.name}">
+                        <span class="au-product__badge">New</span>
+                        <div class="au-product__actions">
+                            <a th:href="@{/shop/product/{slug}(slug=${product.slug})}" class="au-product__action-btn">
+                                View Product
+                            </a>
+                        </div>
+                    </div>
+                    <div class="au-product__info">
+                        <p class="au-product__brand">Auvier</p>
+                        <h3 class="au-product__name">
+                            <a th:href="@{/shop/product/{slug}(slug=${product.slug})}" th:text="${product.name}">Product Name</a>
+                        </h3>
+                        <p class="au-product__price"
+                           th:if="${product.variants != null and !product.variants.isEmpty()}"
+                           th:text="${'$' + #numbers.formatDecimal(product.variants[0].price, 1, 2)}">$299.00</p>
+                        <p class="au-product__price"
+                           th:unless="${product.variants != null and !product.variants.isEmpty()}">Price TBD</p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Empty state if no products -->
+            <div th:if="${featuredProducts == null or featuredProducts.isEmpty()}" style="text-align: center; padding: 40px 20px;">
+                <p style="opacity: 0.6;">New arrivals coming soon.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: var(--au-space-3xl);">
+                <a th:href="@{/shop}" class="au-btn au-btn--secondary">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Banner -->
+    <section class="au-featured">
+        <div class="au-featured__media">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
+                 alt="Craftsmanship">
+        </div>
+        <div class="au-featured__content">
+            <p class="au-featured__eyebrow">Our Philosophy</p>
+            <h2 class="au-featured__title">Crafted with Purpose</h2>
+            <p class="au-featured__text">
+                Each piece in our collection is thoughtfully designed and meticulously crafted.
+                We believe in creating timeless garments that transcend seasons, using only the
+                finest materials sourced from artisan workshops around the world.
+            </p>
+            <a th:href="@{/about}" class="au-btn au-btn--secondary">Discover Our Story</a>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="au-section">
+        <div class="au-container">
+            <div class="au-section-header">
+                <p class="au-section-header__eyebrow">Explore</p>
+                <h2 class="au-section-header__title">Shop by Category</h2>
+            </div>
+
+            <div class="au-categories">
+                <a th:href="@{/shop?category=outerwear}" class="au-category">
+                    <div class="au-category__media">
+                        <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=800&q=80" alt="Outerwear">
+                    </div>
+                    <div class="au-category__overlay"></div>
+                    <div class="au-category__content">
+                        <h3 class="au-category__title">Outerwear</h3>
+                        <span class="au-category__link">Shop Collection <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a th:href="@{/shop?category=dresses}" class="au-category">
+                    <div class="au-category__media">
+                        <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80" alt="Dresses">
+                    </div>
+                    <div class="au-category__overlay"></div>
+                    <div class="au-category__content">
+                        <h3 class="au-category__title">Dresses</h3>
+                        <span class="au-category__link">Shop Collection <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a th:href="@{/shop?category=accessories}" class="au-category">
+                    <div class="au-category__media">
+                        <img src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=800&q=80" alt="Accessories">
+                    </div>
+                    <div class="au-category__overlay"></div>
+                    <div class="au-category__content">
+                        <h3 class="au-category__title">Accessories</h3>
+                        <span class="au-category__link">Shop Collection <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Editorial -->
+    <section class="au-section" style="background-color: var(--au-cream);">
+        <div class="au-container">
+            <div class="au-section-header">
+                <p class="au-section-header__eyebrow">Journal</p>
+                <h2 class="au-section-header__title">The Auvier Edit</h2>
+                <p class="au-section-header__subtitle">
+                    Discover the stories behind our collections, styling guides, and exclusive interviews.
+                </p>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="#" class="au-btn au-btn--secondary">Coming Soon</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!--/* @thymesVar id="action" type="java.lang.String" */-->
+<!--/* @thymesVar id="productVariantDto" type="com.auvier.dtos.ProductVariantDto" */-->
+<!--/* @thymesVar id="sizes" type="java.util.List&lt;com.auvier.enums.Size&gt;" */-->
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="newOrEditForm(action, productVariantDto, sizes)">
+
+    <form method="post" th:action="${action}" th:object="${productVariantDto}" class="v-admin-form" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{productId}">
+
+        <div class="v-card">
+            <div class="v-card__header">
+                <div>
+                    <h2 class="v-card__title" th:text="*{id} != null ? 'Edit Variant' : 'New Variant'">Variant</h2>
+                    <p class="v-card__subtitle">Define SKU, price, size, color, stock, and image.</p>
+                </div>
+            </div>
+
+            <div class="v-card__body">
+
+                <!-- Image Upload Section -->
+                <div class="v-field" style="grid-column: 1 / -1; margin-bottom: 20px;">
+                    <label class="v-label">Product Image</label>
+                    <div class="v-control">
+                        <div class="v-image-upload" style="display: flex; gap: 20px; align-items: flex-start;">
+                            <div class="v-image-preview" id="imagePreviewContainer"
+                                 style="width: 200px; height: 250px; border: 1px dashed rgba(255,255,255,0.2); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2);">
+                                <img id="imagePreview"
+                                     th:src="${productVariantDto.imageUrl != null && !productVariantDto.imageUrl.isEmpty()} ? ${productVariantDto.imageUrl} : ''"
+                                     th:style="${productVariantDto.imageUrl != null && !productVariantDto.imageUrl.isEmpty()} ? 'width: 100%; height: 100%; object-fit: cover;' : 'display: none;'"
+                                     alt="Preview">
+                                <span id="noImageText"
+                                      th:style="${productVariantDto.imageUrl != null && !productVariantDto.imageUrl.isEmpty()} ? 'display: none;' : ''"
+                                      style="color: rgba(255,255,255,0.4); font-size: 13px;">No image</span>
+                            </div>
+                            <div style="flex: 1;">
+                                <!-- File Upload -->
+                                <div style="margin-bottom: 15px;">
+                                    <label class="v-file-upload" style="display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+                                        <i class="bi bi-upload" style="font-size: 16px;"></i>
+                                        <span>Upload from PC</span>
+                                        <input type="file"
+                                               id="imageFile"
+                                               name="imageFile"
+                                               accept="image/png, image/jpeg, image/jpg, image/gif, image/webp, image/svg+xml"
+                                               style="display: none;"
+                                               onchange="handleFileSelect(this)">
+                                    </label>
+                                    <span id="fileName" style="margin-left: 10px; color: rgba(255,255,255,0.5); font-size: 13px;"></span>
+                                </div>
+
+                                <!-- Or URL Input -->
+                                <div style="margin-bottom: 10px; color: rgba(255,255,255,0.4); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Or enter URL</div>
+                                <input type="text" id="imageUrl" class="v-input" th:field="*{imageUrl}"
+                                       placeholder="https://example.com/image.jpg"
+                                       style="margin-bottom: 10px;">
+                                <div class="v-help">Upload an image (PNG, JPG, GIF, WebP, SVG) or enter a URL. Images are auto-cropped to 4:5 ratio.</div>
+                                <div class="v-error" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="v-grid v-grid--2">
+
+                    <div class="v-field">
+                        <label class="v-label" for="sku">SKU</label>
+                        <div class="v-control">
+                            <input id="sku" type="text" class="v-input" th:field="*{sku}" maxlength="60" required>
+                            <div class="v-error" th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></div>
+                        </div>
+                    </div>
+
+                    <div class="v-field">
+                        <label class="v-label" for="price">Price</label>
+                        <div class="v-control">
+                            <input id="price" type="number" min="0" step="0.01"
+                                   class="v-input" th:field="*{price}" required>
+                            <div class="v-error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+                        </div>
+                    </div>
+
+                    <div class="v-field">
+                        <label class="v-label" for="size">Size</label>
+                        <div class="v-control">
+                            <select id="size" class="v-select" th:field="*{size}" required>
+                                <option value="" disabled selected>Select size</option>
+                                <option th:each="s : ${sizes}" th:value="${s}" th:text="${s}"></option>
+                            </select>
+                            <div class="v-error" th:if="${#fields.hasErrors('size')}" th:errors="*{size}"></div>
+                        </div>
+                    </div>
+
+                    <div class="v-field">
+                        <label class="v-label" for="color">Color</label>
+                        <div class="v-control">
+                            <input id="color" type="text" class="v-input" th:field="*{color}" maxlength="30" required>
+                            <div class="v-error" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
+                        </div>
+                    </div>
+
+                    <div class="v-field">
+                        <label class="v-label" for="stock">Stock</label>
+                        <div class="v-control">
+                            <input id="stock" type="number" min="0" class="v-input" th:field="*{stock}" required>
+                            <div class="v-error" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></div>
+                        </div>
+                    </div>
+
+                    <div class="v-field">
+                        <label class="v-label">Active</label>
+                        <div class="v-control">
+                            <label class="v-check">
+                                <input type="checkbox" class="v-check__input" th:field="*{active}">
+                                <span class="v-check__box"></span>
+                                <span class="v-check__text">Enabled</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="v-card__footer">
+                <div class="v-actions">
+                    <a class="v-btn v-btn--ghost"
+                       th:href="@{/admin/products/{id}/variants(id=${productVariantDto.productId})}">
+                        Cancel
+                    </a>
+                    <button type="submit" class="v-btn v-btn--primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        // Handle file selection from PC
+        function handleFileSelect(input) {
+            var file = input.files[0];
+            var preview = document.getElementById('imagePreview');
+            var noText = document.getElementById('noImageText');
+            var fileName = document.getElementById('fileName');
+            var urlInput = document.getElementById('imageUrl');
+
+            if (file) {
+                // Validate file type
+                var validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/svg+xml'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please select a valid image file (PNG, JPG, GIF, WebP, or SVG)');
+                    input.value = '';
+                    return;
+                }
+
+                // Show file name
+                fileName.textContent = file.name;
+
+                // Preview the image
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    preview.style.width = '100%';
+                    preview.style.height = '100%';
+                    preview.style.objectFit = 'cover';
+                    noText.style.display = 'none';
+
+                    // Clear URL input since we're using file upload
+                    urlInput.value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Image preview on URL change
+        document.getElementById('imageUrl').addEventListener('input', function() {
+            var url = this.value.trim();
+            var preview = document.getElementById('imagePreview');
+            var noText = document.getElementById('noImageText');
+            var fileInput = document.getElementById('imageFile');
+            var fileName = document.getElementById('fileName');
+
+            if (url) {
+                // Clear file input since we're using URL
+                fileInput.value = '';
+                fileName.textContent = '';
+
+                preview.src = url;
+                preview.style.display = 'block';
+                preview.style.width = '100%';
+                preview.style.height = '100%';
+                preview.style.objectFit = 'cover';
+                noText.style.display = 'none';
+
+                preview.onerror = function() {
+                    preview.style.display = 'none';
+                    noText.style.display = 'block';
+                    noText.textContent = 'Invalid image URL';
+                };
+            } else {
+                preview.style.display = 'none';
+                noText.style.display = 'block';
+                noText.textContent = 'No image';
+            }
+        });
+
+        // Style file upload button on hover
+        document.querySelector('.v-file-upload').addEventListener('mouseenter', function() {
+            this.style.background = 'rgba(255,255,255,0.1)';
+            this.style.borderColor = 'var(--c-accent)';
+        });
+        document.querySelector('.v-file-upload').addEventListener('mouseleave', function() {
+            this.style.background = 'rgba(255,255,255,0.05)';
+            this.style.borderColor = 'rgba(255,255,255,0.1)';
+        });
+    </script>
+
+</div>

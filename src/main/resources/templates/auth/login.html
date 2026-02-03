@@ -1,66 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Login')}"></head>
+<head th:replace="~{store/fragments/_layout :: head('Sign In')}"></head>
 
 <body>
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
 
-<main class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow-sm rounded-3">
-                <div class="card-body p-4">
+<main class="au-auth">
+    <div class="au-auth-card">
+        <h1 class="au-auth-card__title">Welcome Back</h1>
+        <p class="au-auth-card__subtitle">Sign in to your account</p>
 
-                    <h2 class="card-title text-center mb-4" style="font-family: 'Playfair Display', serif;">
-                        <i class="bi bi-person-circle"></i> Login
-                    </h2>
-
-                    <!-- Alerts -->
-                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <span th:text="${error}">Invalid credentials</span>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-
-                    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
-                        <span th:text="${message}">Success</span>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-
-                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-                        <span th:text="${success}">Success</span>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-
-                    <!-- Login Form -->
-                    <form th:action="@{/login}" method="post">
-                        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required autofocus>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                    </form>
-
-                    <hr>
-
-                    <p class="text-center mb-0">
-                        Don't have an account? <a th:href="@{/register}">Register here</a>
-                    </p>
-
-                </div>
-            </div>
+        <!-- Alerts -->
+        <div th:if="${error}" class="au-alert au-alert--error">
+            <span th:text="${error}">Invalid credentials</span>
         </div>
+
+        <div th:if="${message}" class="au-alert au-alert--success">
+            <span th:text="${message}">Success</span>
+        </div>
+
+        <div th:if="${success}" class="au-alert au-alert--success">
+            <span th:text="${success}">Success</span>
+        </div>
+
+        <!-- Login Form -->
+        <form th:action="@{/login}" method="post">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+            <div class="au-form-group">
+                <label for="username" class="au-form-label">Email or Username</label>
+                <input type="text" class="au-form-input" id="username" name="username"
+                       placeholder="Enter your email or username" required autofocus>
+            </div>
+
+            <div class="au-form-group">
+                <label for="password" class="au-form-label">Password</label>
+                <input type="password" class="au-form-input" id="password" name="password"
+                       placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="au-btn au-btn--primary au-btn--full">Sign In</button>
+        </form>
+
+        <p class="au-auth-card__footer">
+            Don't have an account? <a th:href="@{/register}">Create one</a>
+        </p>
     </div>
 </main>
 
-<footer th:replace="~{fragments/layout :: footer}"></footer>
-<div th:replace="~{fragments/layout :: scripts}"></div>
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
 </body>
 </html>

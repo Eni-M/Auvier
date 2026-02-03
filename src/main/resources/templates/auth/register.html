@@ -1,123 +1,111 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Register')}"></head>
+<head th:replace="~{store/fragments/_layout :: head('Create Account')}"></head>
 
 <body>
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
 
-<main class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-body p-4">
+<main class="au-auth">
+    <div class="au-auth-card">
+        <h1 class="au-auth-card__title">Create Account</h1>
+        <p class="au-auth-card__subtitle">Join Auvier for exclusive access</p>
 
-                    <h3 class="card-title text-center mb-4">
-                        <i class="bi bi-person-plus"></i> Create Account
-                    </h3>
+        <form th:action="@{/register}"
+              th:object="${user}"
+              method="post"
+              novalidate>
 
-                    <form th:action="@{/register}"
-                          th:object="${user}"
-                          method="post"
-                          novalidate>
+            <!-- Username -->
+            <div class="au-form-group">
+                <label class="au-form-label">Username *</label>
+                <input type="text"
+                       th:field="*{username}"
+                       class="au-form-input"
+                       th:classappend="${#fields.hasErrors('username')} ? ' is-invalid'"
+                       placeholder="Choose a username">
+                <span class="au-form-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+            </div>
 
-                        <!-- Username -->
-                        <div class="mb-3">
-                            <label class="form-label">Username *</label>
-                            <input type="text"
-                                   th:field="*{username}"
-                                   class="form-control"
-                                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
-                            <div class="invalid-feedback"
-                                 th:errors="*{username}"></div>
-                        </div>
+            <!-- Email -->
+            <div class="au-form-group">
+                <label class="au-form-label">Email *</label>
+                <input type="email"
+                       th:field="*{email}"
+                       class="au-form-input"
+                       th:classappend="${#fields.hasErrors('email')} ? ' is-invalid'"
+                       placeholder="your@email.com">
+                <span class="au-form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
 
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label class="form-label">Email *</label>
-                            <input type="email"
-                                   th:field="*{email}"
-                                   class="form-control"
-                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
-                            <div class="invalid-feedback"
-                                 th:errors="*{email}"></div>
-                        </div>
+            <!-- Password -->
+            <div class="au-form-group">
+                <label class="au-form-label">Password *</label>
+                <input type="password"
+                       th:field="*{password}"
+                       class="au-form-input"
+                       th:classappend="${#fields.hasErrors('password')} ? ' is-invalid'"
+                       placeholder="Create a password">
+                <span class="au-form-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
 
-                        <!-- Password -->
-                        <div class="mb-3">
-                            <label class="form-label">Password *</label>
-                            <input type="password"
-                                   th:field="*{password}"
-                                   class="form-control"
-                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
-                            <div class="invalid-feedback"
-                                 th:errors="*{password}"></div>
-                        </div>
+            <!-- First & Last Name -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--au-space-md);">
+                <div class="au-form-group">
+                    <label class="au-form-label">First Name</label>
+                    <input type="text"
+                           th:field="*{firstName}"
+                           class="au-form-input"
+                           th:classappend="${#fields.hasErrors('firstName')} ? ' is-invalid'"
+                           placeholder="First name">
+                    <span class="au-form-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                </div>
 
-                        <!-- First & Last Name -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">First Name</label>
-                                <input type="text"
-                                       th:field="*{firstName}"
-                                       class="form-control"
-                                       th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
-                                <div class="invalid-feedback"
-                                     th:errors="*{firstName}"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Last Name</label>
-                                <input type="text"
-                                       th:field="*{lastName}"
-                                       class="form-control"
-                                       th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'">
-                                <div class="invalid-feedback"
-                                     th:errors="*{lastName}"></div>
-                            </div>
-                        </div>
-
-                        <!-- Address -->
-                        <div class="mb-3">
-                            <label class="form-label">Address</label>
-                            <input type="text"
-                                   th:field="*{address}"
-                                   class="form-control"
-                                   th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
-                            <div class="invalid-feedback"
-                                 th:errors="*{address}"></div>
-                        </div>
-
-                        <!-- Phone -->
-                        <div class="mb-3">
-                            <label class="form-label">Phone</label>
-                            <input type="text"
-                                   th:field="*{phone}"
-                                   class="form-control"
-                                   th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
-                            <div class="invalid-feedback"
-                                 th:errors="*{phone}"></div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">
-                            Register
-                        </button>
-                    </form>
-
-                    <hr>
-
-                    <p class="text-center mb-0">
-                        Already have an account?
-                        <a th:href="@{/login}">Login here</a>
-                    </p>
-
+                <div class="au-form-group">
+                    <label class="au-form-label">Last Name</label>
+                    <input type="text"
+                           th:field="*{lastName}"
+                           class="au-form-input"
+                           th:classappend="${#fields.hasErrors('lastName')} ? ' is-invalid'"
+                           placeholder="Last name">
+                    <span class="au-form-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
                 </div>
             </div>
-        </div>
+
+            <!-- Address -->
+            <div class="au-form-group">
+                <label class="au-form-label">Address</label>
+                <input type="text"
+                       th:field="*{address}"
+                       class="au-form-input"
+                       th:classappend="${#fields.hasErrors('address')} ? ' is-invalid'"
+                       placeholder="Your address">
+                <span class="au-form-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+            </div>
+
+            <!-- Phone -->
+            <div class="au-form-group">
+                <label class="au-form-label">Phone</label>
+                <input type="tel"
+                       th:field="*{phone}"
+                       class="au-form-input"
+                       th:classappend="${#fields.hasErrors('phone')} ? ' is-invalid'"
+                       placeholder="Your phone number"
+                       pattern="[+]?[0-9\s\-()]+">
+                <span class="au-form-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+            </div>
+
+            <button type="submit" class="au-btn au-btn--primary au-btn--full">
+                Create Account
+            </button>
+        </form>
+
+        <p class="au-auth-card__footer">
+            Already have an account? <a th:href="@{/login}">Sign in</a>
+        </p>
     </div>
 </main>
 
-<footer th:replace="~{fragments/layout :: footer}"></footer>
-<div th:replace="~{fragments/layout :: scripts}"></div>
-
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
 </body>
 </html>

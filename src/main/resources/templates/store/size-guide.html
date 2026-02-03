@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Size Guide')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Page Header -->
+    <section class="au-page-header">
+        <div class="au-container">
+            <h1 class="au-page-title">Size Guide</h1>
+            <p class="au-page-subtitle">Find your perfect fit</p>
+        </div>
+    </section>
+
+    <section class="au-section">
+        <div class="au-container">
+
+            <!-- How to Measure -->
+            <div class="au-size-intro">
+                <h2>How to Measure</h2>
+                <p>For the best fit, take your measurements while wearing lightweight clothing. Use a soft measuring tape and keep it snug but not tight.</p>
+
+                <div class="au-measure-grid">
+                    <div class="au-measure-item">
+                        <div class="au-measure-icon"><i class="bi bi-rulers"></i></div>
+                        <h4>Chest/Bust</h4>
+                        <p>Measure around the fullest part of your chest, keeping the tape level.</p>
+                    </div>
+                    <div class="au-measure-item">
+                        <div class="au-measure-icon"><i class="bi bi-rulers"></i></div>
+                        <h4>Waist</h4>
+                        <p>Measure around your natural waistline, the narrowest part of your torso.</p>
+                    </div>
+                    <div class="au-measure-item">
+                        <div class="au-measure-icon"><i class="bi bi-rulers"></i></div>
+                        <h4>Hips</h4>
+                        <p>Measure around the fullest part of your hips, approximately 8" below your waist.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Women's Sizing -->
+            <div class="au-size-section">
+                <h2>Women's Clothing</h2>
+
+                <div class="au-size-table-wrap">
+                    <table class="au-size-table">
+                        <thead>
+                            <tr>
+                                <th>Size</th>
+                                <th>US</th>
+                                <th>UK</th>
+                                <th>EU</th>
+                                <th>Bust (in)</th>
+                                <th>Waist (in)</th>
+                                <th>Hips (in)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>XS</strong></td>
+                                <td>0-2</td>
+                                <td>4-6</td>
+                                <td>32-34</td>
+                                <td>31-32</td>
+                                <td>24-25</td>
+                                <td>34-35</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S</strong></td>
+                                <td>4-6</td>
+                                <td>8-10</td>
+                                <td>36-38</td>
+                                <td>33-34</td>
+                                <td>26-27</td>
+                                <td>36-37</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M</strong></td>
+                                <td>8-10</td>
+                                <td>12-14</td>
+                                <td>40-42</td>
+                                <td>35-36</td>
+                                <td>28-29</td>
+                                <td>38-39</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L</strong></td>
+                                <td>12-14</td>
+                                <td>16-18</td>
+                                <td>44-46</td>
+                                <td>37-39</td>
+                                <td>30-32</td>
+                                <td>40-42</td>
+                            </tr>
+                            <tr>
+                                <td><strong>XL</strong></td>
+                                <td>16-18</td>
+                                <td>20-22</td>
+                                <td>48-50</td>
+                                <td>40-42</td>
+                                <td>33-35</td>
+                                <td>43-45</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Men's Sizing -->
+            <div class="au-size-section">
+                <h2>Men's Clothing</h2>
+
+                <div class="au-size-table-wrap">
+                    <table class="au-size-table">
+                        <thead>
+                            <tr>
+                                <th>Size</th>
+                                <th>US</th>
+                                <th>UK</th>
+                                <th>EU</th>
+                                <th>Chest (in)</th>
+                                <th>Waist (in)</th>
+                                <th>Hips (in)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>XS</strong></td>
+                                <td>34</td>
+                                <td>34</td>
+                                <td>44</td>
+                                <td>34-35</td>
+                                <td>28-29</td>
+                                <td>34-35</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S</strong></td>
+                                <td>36</td>
+                                <td>36</td>
+                                <td>46</td>
+                                <td>36-37</td>
+                                <td>30-31</td>
+                                <td>36-37</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M</strong></td>
+                                <td>38-40</td>
+                                <td>38-40</td>
+                                <td>48-50</td>
+                                <td>38-40</td>
+                                <td>32-34</td>
+                                <td>38-40</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L</strong></td>
+                                <td>42-44</td>
+                                <td>42-44</td>
+                                <td>52-54</td>
+                                <td>42-44</td>
+                                <td>36-38</td>
+                                <td>42-44</td>
+                            </tr>
+                            <tr>
+                                <td><strong>XL</strong></td>
+                                <td>46-48</td>
+                                <td>46-48</td>
+                                <td>56-58</td>
+                                <td>46-48</td>
+                                <td>40-42</td>
+                                <td>46-48</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fit Tips -->
+            <div class="au-size-tips">
+                <h2>Fit Tips</h2>
+                <div class="au-tips-grid">
+                    <div class="au-tip-card">
+                        <i class="bi bi-lightbulb"></i>
+                        <h4>Between Sizes?</h4>
+                        <p>If you're between sizes, we recommend sizing up for a more comfortable fit, especially for structured pieces.</p>
+                    </div>
+                    <div class="au-tip-card">
+                        <i class="bi bi-arrow-down-up"></i>
+                        <h4>Relaxed vs. Fitted</h4>
+                        <p>Check product descriptions for fit notes. Some items are designed with a relaxed silhouette and may run larger.</p>
+                    </div>
+                    <div class="au-tip-card">
+                        <i class="bi bi-chat-dots"></i>
+                        <h4>Need Help?</h4>
+                        <p>Our stylists are happy to help you find your perfect fit. Contact us with your measurements for personalized advice.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="au-size-cta">
+                <p>Still unsure about your size?</p>
+                <a th:href="@{/contact}" class="au-btn au-btn--primary">Contact Our Stylists</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-page-header { text-align: center; padding: var(--au-space-4xl) 0 var(--au-space-2xl); background: var(--au-cream); }
+    .au-page-title { font-family: var(--au-font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-page-subtitle { color: var(--au-gray); }
+
+    .au-size-intro { text-align: center; max-width: 800px; margin: 0 auto var(--au-space-4xl); }
+    .au-size-intro h2 { font-family: var(--au-font-display); font-size: 1.75rem; font-weight: 400; margin-bottom: var(--au-space-md); }
+    .au-size-intro > p { color: var(--au-gray-dark); margin-bottom: var(--au-space-2xl); }
+
+    .au-measure-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--au-space-xl); }
+    .au-measure-item { text-align: center; }
+    .au-measure-icon { width: 60px; height: 60px; margin: 0 auto var(--au-space-md); display: flex; align-items: center; justify-content: center; border: 1px solid var(--au-gray-light); border-radius: 50%; font-size: 1.5rem; color: var(--au-gray); }
+    .au-measure-item h4 { font-size: 1rem; font-weight: 600; margin-bottom: var(--au-space-xs); }
+    .au-measure-item p { font-size: 0.875rem; color: var(--au-gray-dark); }
+
+    .au-size-section { margin-bottom: var(--au-space-4xl); }
+    .au-size-section h2 { font-family: var(--au-font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: var(--au-space-lg); padding-bottom: var(--au-space-md); border-bottom: 1px solid var(--au-gray-light); }
+
+    .au-size-table-wrap { overflow-x: auto; }
+    .au-size-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    .au-size-table th, .au-size-table td { padding: var(--au-space-md) var(--au-space-lg); text-align: center; border-bottom: 1px solid var(--au-gray-light); }
+    .au-size-table th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--au-gray); font-weight: 500; background: var(--au-cream); }
+    .au-size-table td { font-size: 0.9375rem; color: var(--au-gray-dark); }
+    .au-size-table td strong { color: var(--au-black); }
+    .au-size-table tbody tr:hover { background: var(--au-cream); }
+
+    .au-size-tips { margin-bottom: var(--au-space-4xl); }
+    .au-size-tips h2 { font-family: var(--au-font-display); font-size: 1.5rem; font-weight: 400; text-align: center; margin-bottom: var(--au-space-xl); }
+    .au-tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--au-space-xl); }
+    .au-tip-card { text-align: center; padding: var(--au-space-xl); background: var(--au-cream); }
+    .au-tip-card i { font-size: 2rem; color: var(--au-gray); margin-bottom: var(--au-space-md); }
+    .au-tip-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: var(--au-space-sm); }
+    .au-tip-card p { font-size: 0.875rem; color: var(--au-gray-dark); line-height: 1.6; }
+
+    .au-size-cta { text-align: center; padding: var(--au-space-2xl); background: var(--au-black); color: var(--au-white); }
+    .au-size-cta p { margin-bottom: var(--au-space-lg); }
+    .au-size-cta .au-btn--primary { background: var(--au-white); color: var(--au-black); border-color: var(--au-white); }
+    .au-size-cta .au-btn--primary:hover { background: transparent; color: var(--au-white); }
+
+    @media (max-width: 768px) {
+        .au-measure-grid, .au-tips-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</body>
+</html>

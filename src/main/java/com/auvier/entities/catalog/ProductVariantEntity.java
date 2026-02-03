@@ -31,8 +31,10 @@ public class ProductVariantEntity {
     @Column(nullable = false, length = 30)
     private String color;
 
-
     private Size size;
+
+    @Column(length = 500)
+    private String imageUrl;
 
     @Column(nullable = false)
     private boolean active = true;

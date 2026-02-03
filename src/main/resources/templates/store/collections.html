@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Collections')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Page Header -->
+    <section class="au-page-header">
+        <div class="au-container">
+            <h1 class="au-page-header__title">Collections</h1>
+            <p class="au-page-header__subtitle">Explore our curated categories</p>
+        </div>
+    </section>
+
+    <!-- Collections Grid -->
+    <section class="au-section">
+        <div class="au-container">
+            <div class="au-collections-grid" th:if="${categories != null && !categories.isEmpty()}">
+                <a th:each="category : ${categories}"
+                   th:href="@{/shop(category=${category.name})}"
+                   class="au-collection-card">
+                    <div class="au-collection-card__media">
+                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80"
+                             th:alt="${category.name}">
+                    </div>
+                    <div class="au-collection-card__overlay"></div>
+                    <div class="au-collection-card__content">
+                        <h2 class="au-collection-card__title" th:text="${category.name}">Category</h2>
+                        <span class="au-collection-card__link">Shop Now <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Empty state if no categories -->
+            <div th:if="${categories == null || categories.isEmpty()}" style="text-align: center; padding: 80px 20px;">
+                <i class="bi bi-collection" style="font-size: 48px; opacity: 0.3;"></i>
+                <h3 style="margin-top: 20px;">No collections yet</h3>
+                <p style="opacity: 0.6; margin-top: 10px;">Check back later for new collections.</p>
+                <a th:href="@{/shop}" class="au-btn au-btn--secondary" style="margin-top: 20px;">Browse All Products</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-page-header {
+        text-align: center;
+        padding: var(--au-space-4xl) 0;
+        background: var(--au-color-surface);
+    }
+    .au-page-header__title {
+        font-family: var(--au-font-display);
+        font-size: 3rem;
+        font-weight: 400;
+        margin: 0;
+    }
+    .au-page-header__subtitle {
+        margin-top: var(--au-space-sm);
+        opacity: 0.7;
+    }
+    .au-collections-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--au-space-xl);
+    }
+    .au-collection-card {
+        position: relative;
+        display: block;
+        aspect-ratio: 4/5;
+        overflow: hidden;
+        border-radius: 4px;
+        text-decoration: none;
+        color: white;
+    }
+    .au-collection-card__media {
+        position: absolute;
+        inset: 0;
+    }
+    .au-collection-card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+    .au-collection-card:hover .au-collection-card__media img {
+        transform: scale(1.05);
+    }
+    .au-collection-card__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%);
+    }
+    .au-collection-card__content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: var(--au-space-2xl);
+    }
+    .au-collection-card__title {
+        font-family: var(--au-font-display);
+        font-size: 1.75rem;
+        font-weight: 400;
+        margin: 0 0 var(--au-space-sm);
+    }
+    .au-collection-card__link {
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        opacity: 0.9;
+    }
+    .au-collection-card__link i {
+        transition: transform 0.3s ease;
+    }
+    .au-collection-card:hover .au-collection-card__link i {
+        transform: translateX(4px);
+    }
+</style>
+</body>
+</html>

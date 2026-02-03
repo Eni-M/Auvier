@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('About Us')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Hero -->
+    <section class="au-hero" style="height: 60vh; min-height: 400px;">
+        <div class="au-hero__media">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
+                 alt="Auvier Atelier">
+        </div>
+        <div class="au-hero__overlay"></div>
+        <div class="au-hero__content">
+            <p class="au-hero__subtitle">Our Story</p>
+            <h1 class="au-hero__title">House of Advancement</h1>
+        </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="au-section">
+        <div class="au-container au-container--sm" style="text-align: center;">
+            <p class="au-text-eyebrow" style="margin-bottom: var(--au-space-lg);">Founded 2024</p>
+            <h2 style="font-family: var(--au-font-display); font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: var(--au-space-xl);">
+                Redefining Modern Elegance
+            </h2>
+            <p style="font-size: 1.1rem; line-height: 1.9; color: var(--au-gray-dark);">
+                Auvier was born from a simple belief: that exceptional clothing should be both timeless and purposeful.
+                We create garments that transcend fleeting trends, designed for those who appreciate the intersection
+                of refined aesthetics and conscious craftsmanship.
+            </p>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="au-featured">
+        <div class="au-featured__media">
+            <img src="https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1200&q=80"
+                 alt="Craftsmanship">
+        </div>
+        <div class="au-featured__content">
+            <p class="au-featured__eyebrow">Our Philosophy</p>
+            <h2 class="au-featured__title">Crafted with Intention</h2>
+            <p class="au-featured__text">
+                Every stitch, every seam, every carefully selected fabric tells a story of dedication.
+                Our artisans bring decades of expertise to each piece, ensuring that when you wear Auvier,
+                you're wearing the culmination of generations of knowledge.
+            </p>
+            <p class="au-featured__text">
+                We partner with mills and workshops that share our commitment to excellence and sustainability,
+                creating a supply chain that respects both people and planet.
+            </p>
+        </div>
+    </section>
+
+    <!-- Pillars -->
+    <section class="au-section" style="background-color: var(--au-cream);">
+        <div class="au-container">
+            <div class="au-section-header">
+                <p class="au-section-header__eyebrow">What Guides Us</p>
+                <h2 class="au-section-header__title">Our Pillars</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--au-space-3xl);">
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: var(--au-space-md);">
+                        <i class="bi bi-gem"></i>
+                    </div>
+                    <h3 style="font-family: var(--au-font-display); font-size: 1.5rem; margin-bottom: var(--au-space-md);">
+                        Quality
+                    </h3>
+                    <p style="color: var(--au-gray-dark); line-height: 1.8;">
+                        We source only the finest materials—Italian cashmere, Japanese denim, French linen—ensuring
+                        each garment meets our exacting standards.
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: var(--au-space-md);">
+                        <i class="bi bi-heart"></i>
+                    </div>
+                    <h3 style="font-family: var(--au-font-display); font-size: 1.5rem; margin-bottom: var(--au-space-md);">
+                        Integrity
+                    </h3>
+                    <p style="color: var(--au-gray-dark); line-height: 1.8;">
+                        Transparency in our process, honesty in our pricing, and respect for every hand that
+                        touches our products—these aren't just values, they're promises.
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: var(--au-space-md);">
+                        <i class="bi bi-leaf"></i>
+                    </div>
+                    <h3 style="font-family: var(--au-font-display); font-size: 1.5rem; margin-bottom: var(--au-space-md);">
+                        Sustainability
+                    </h3>
+                    <p style="color: var(--au-gray-dark); line-height: 1.8;">
+                        Fashion should never cost the earth. We're committed to reducing our environmental footprint
+                        through responsible sourcing and mindful production.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Banner -->
+    <section class="au-featured" style="min-height: 70vh;">
+        <div class="au-featured__content" style="background-color: var(--au-black); color: var(--au-white);">
+            <p class="au-featured__eyebrow" style="color: var(--au-gray-light);">The Atelier</p>
+            <h2 class="au-featured__title" style="color: var(--au-white);">Where Vision Becomes Reality</h2>
+            <p class="au-featured__text" style="color: var(--au-gray-light);">
+                Our design studio in Milan serves as the heart of Auvier. Here, our creative team
+                develops each collection, drawing inspiration from art, architecture, and the ever-evolving
+                landscape of contemporary culture.
+            </p>
+            <p class="au-featured__text" style="color: var(--au-gray-light);">
+                From initial sketch to final stitch, every piece undergoes a meticulous journey of
+                refinement before it earns the Auvier name.
+            </p>
+        </div>
+        <div class="au-featured__media">
+            <img src="https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1200&q=80"
+                 alt="Auvier Atelier">
+        </div>
+    </section>
+
+    <!-- Team Quote -->
+    <section class="au-section">
+        <div class="au-container au-container--sm" style="text-align: center;">
+            <blockquote style="font-family: var(--au-font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-style: italic; line-height: 1.6; margin-bottom: var(--au-space-xl);">
+                "True luxury isn't about logos or price tags—it's about the confidence that comes from wearing
+                something made with genuine care and expertise."
+            </blockquote>
+            <p style="font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--au-gray);">
+                — The Auvier Team
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="au-section" style="background-color: var(--au-black); color: var(--au-white); text-align: center;">
+        <div class="au-container">
+            <p class="au-text-eyebrow" style="color: var(--au-gray-light); margin-bottom: var(--au-space-md);">
+                Begin Your Journey
+            </p>
+            <h2 style="font-family: var(--au-font-display); font-size: clamp(2rem, 4vw, 3rem); margin-bottom: var(--au-space-xl);">
+                Discover the Collection
+            </h2>
+            <a th:href="@{/shop}" class="au-btn au-btn--white au-btn--lg">Shop Now</a>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+</body>
+</html>

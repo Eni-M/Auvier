@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head('Contact Us')}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Page Header -->
+    <section class="au-page-header">
+        <div class="au-container">
+            <h1 class="au-page-title">Contact Us</h1>
+            <p class="au-page-subtitle">We're here to help</p>
+        </div>
+    </section>
+
+    <section class="au-section">
+        <div class="au-container">
+            <div class="au-contact-grid">
+                <!-- Contact Form -->
+                <div class="au-contact-form">
+                    <h2>Send us a message</h2>
+                    <p class="au-muted">Fill out the form below and we'll get back to you within 24-48 hours.</p>
+
+                    <form class="au-form" method="post" th:action="@{/contact}">
+                        <div class="au-form-row">
+                            <div class="au-form-group">
+                                <label class="au-form-label">First Name *</label>
+                                <input type="text" class="au-form-input" name="firstName" required>
+                            </div>
+                            <div class="au-form-group">
+                                <label class="au-form-label">Last Name *</label>
+                                <input type="text" class="au-form-input" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="au-form-group">
+                            <label class="au-form-label">Email *</label>
+                            <input type="email" class="au-form-input" name="email" required>
+                        </div>
+
+                        <div class="au-form-group">
+                            <label class="au-form-label">Subject *</label>
+                            <select class="au-form-input" name="subject" required>
+                                <option value="">Select a topic</option>
+                                <option value="order">Order Inquiry</option>
+                                <option value="shipping">Shipping Question</option>
+                                <option value="returns">Returns & Exchanges</option>
+                                <option value="product">Product Information</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="au-form-group">
+                            <label class="au-form-label">Order Number (if applicable)</label>
+                            <input type="text" class="au-form-input" name="orderNumber" placeholder="e.g., AUV-123456">
+                        </div>
+
+                        <div class="au-form-group">
+                            <label class="au-form-label">Message *</label>
+                            <textarea class="au-form-input au-form-textarea" name="message" rows="5" required placeholder="How can we help you?"></textarea>
+                        </div>
+
+                        <button type="submit" class="au-btn au-btn--primary">Send Message</button>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="au-contact-info">
+                    <div class="au-contact-card">
+                        <h3>Customer Service</h3>
+                        <p>Our team is available Monday through Friday, 9am to 6pm EST.</p>
+
+                        <div class="au-contact-item">
+                            <i class="bi bi-envelope"></i>
+                            <div>
+                                <strong>Email</strong>
+                                <a href="mailto:support@auvier.com">support@auvier.com</a>
+                            </div>
+                        </div>
+
+                        <div class="au-contact-item">
+                            <i class="bi bi-telephone"></i>
+                            <div>
+                                <strong>Phone</strong>
+                                <a href="tel:+1-800-AUVIER">+1-800-AUVIER</a>
+                            </div>
+                        </div>
+
+                        <div class="au-contact-item">
+                            <i class="bi bi-clock"></i>
+                            <div>
+                                <strong>Hours</strong>
+                                <span>Mon - Fri: 9am - 6pm EST</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="au-contact-card">
+                        <h3>Visit Our Flagship</h3>
+                        <p>Experience Auvier in person at our flagship location.</p>
+
+                        <div class="au-contact-item">
+                            <i class="bi bi-geo-alt"></i>
+                            <div>
+                                <strong>Address</strong>
+                                <span>123 Fashion Avenue<br>New York, NY 10001</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="au-contact-card">
+                        <h3>Follow Us</h3>
+                        <div class="au-social-links">
+                            <a href="#" class="au-social-link"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="au-social-link"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="au-social-link"><i class="bi bi-pinterest"></i></a>
+                            <a href="#" class="au-social-link"><i class="bi bi-twitter-x"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<style>
+    .au-page-header { text-align: center; padding: var(--au-space-4xl) 0 var(--au-space-2xl); background: var(--au-cream); }
+    .au-page-title { font-family: var(--au-font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-page-subtitle { color: var(--au-gray); }
+    .au-contact-grid { display: grid; grid-template-columns: 1fr 400px; gap: var(--au-space-4xl); }
+    .au-contact-form h2 { font-family: var(--au-font-display); font-size: 1.75rem; font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-contact-form > p { margin-bottom: var(--au-space-2xl); }
+    .au-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--au-space-lg); }
+    .au-form-textarea { resize: vertical; min-height: 120px; }
+    .au-contact-info { display: flex; flex-direction: column; gap: var(--au-space-xl); }
+    .au-contact-card { background: var(--au-cream); padding: var(--au-space-xl); }
+    .au-contact-card h3 { font-family: var(--au-font-display); font-size: 1.25rem; font-weight: 400; margin-bottom: var(--au-space-sm); }
+    .au-contact-card > p { font-size: 0.9375rem; color: var(--au-gray-dark); margin-bottom: var(--au-space-lg); }
+    .au-contact-item { display: flex; gap: var(--au-space-md); margin-bottom: var(--au-space-md); }
+    .au-contact-item i { font-size: 1.25rem; color: var(--au-gray); margin-top: 2px; }
+    .au-contact-item strong { display: block; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+    .au-contact-item a, .au-contact-item span { font-size: 0.9375rem; color: var(--au-gray-dark); }
+    .au-contact-item a:hover { color: var(--au-black); }
+    .au-social-links { display: flex; gap: var(--au-space-sm); }
+    .au-social-link { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--au-gray-light); font-size: 1.125rem; color: var(--au-black); transition: all 0.2s ease; }
+    .au-social-link:hover { background: var(--au-black); color: var(--au-white); border-color: var(--au-black); }
+    .au-muted { color: var(--au-gray-dark); }
+    @media (max-width: 992px) { .au-contact-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 576px) { .au-form-row { grid-template-columns: 1fr; } }
+</style>
+</body>
+</html>

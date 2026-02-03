@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout(
+          'Users',
+          ~{::div#content},
+          null,
+          null
+      )}">
+
+<div id="content" class="v-admin">
+
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Users</h1>
+            <p class="v-muted">Manage users</p>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <span>Users</span>
+    </nav>
+
+    <!-- Alerts -->
+    <div class="v-stack" th:if="${error}">
+        <div class="v-alert v-alert--danger">
+            <div class="v-alert__text" th:text="${error}"></div>
+            <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    </div>
+
+    <div class="v-stack" th:if="${success}">
+        <div class="v-alert v-alert--success">
+            <div class="v-alert__text" th:text="${success}"></div>
+            <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="v-card">
+        <div class="v-card__header">
+            <div>
+                <h2 class="v-card__title">All users</h2>
+                <p class="v-card__subtitle"
+                   th:text="${users != null ? #lists.size(users) + ' total' : '0 total'}">
+                    0 total
+                </p>
+            </div>
+        </div>
+
+        <div class="v-tablewrap">
+            <table class="v-table">
+                <thead>
+                <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th style="width: 220px;" class="v-th-right">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <!-- Empty state -->
+                <tr th:if="${users == null or #lists.isEmpty(users)}">
+                    <td colspan="6" class="v-empty">
+                        <div class="v-empty__title">No users yet</div>
+                        <div class="v-empty__text">
+                            Register as the first user.
+                        </div>
+                        <a th:href="@{/register}" class="v-btn v-btn--primary">Sign Up Here</a>
+                    </td>
+                </tr>
+
+                <!-- Users -->
+                <tr th:each="user : ${users}">
+                    <td class="v-mono" th:text="${user.id}">1</td>
+
+                    <td>
+                        <div class="v-strong" th:text="${user.username}">username</div>
+                    </td>
+
+                    <td th:text="${user.fullName}">Full Name</td>
+                    <td class="v-mono" th:text="${user.email}">email@example.com</td>
+                    <td class="v-mono" th:text="${user.role}">ROLE_USER</td>
+
+                    <td class="v-th-right">
+                        <div class="v-btngroup">
+                            <a th:href="@{'/admin/users/' + ${user.id} + '/view'}" class="v-btn v-btn--sm v-btn--ghost">View</a>
+                            <a th:href="@{'/admin/users/' + ${user.id} + '/edit'}" class="v-btn v-btn--sm v-btn--primary">Edit</a>
+                            <button type="button"
+                                    class="v-btn v-btn--sm v-btn--danger delete-btn"
+                                    th:if="${canDelete}"
+                                    th:data-id="${user.id}"
+                                    th:data-name="${user.username}">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="v-modal" style="display:none;">
+        <div class="v-modal__content">
+            <h3 class="v-modal__title">Confirm Deletion</h3>
+            <p class="v-muted" style="margin-bottom: 12px;">This action cannot be undone.</p>
+
+            <div class="v-kv" style="margin-bottom: 8px;">
+                <div class="v-kv__label">User</div>
+                <div class="v-kv__value v-strong" id="modalItemName">Username</div>
+            </div>
+
+            <div class="v-kv" style="margin-bottom: 16px;">
+                <div class="v-kv__label">ID</div>
+                <div class="v-kv__value v-mono" id="modalItemId">0</div>
+            </div>
+
+            <div class="v-modal__warning" style="margin-bottom: 20px;">
+                Deleting removes this user permanently. Their orders and data will be affected.
+            </div>
+
+            <div class="v-modal__actions">
+                <button type="button" onclick="closeModal()" class="v-btn v-btn--ghost">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="v-btn v-btn--danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.delete-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
+                var name = this.getAttribute('data-name');
+                document.getElementById('modalItemName').textContent = name || 'this user';
+                document.getElementById('modalItemId').textContent = id;
+                document.getElementById('deleteForm').action = '/admin/users/' + id + '/delete';
+                document.getElementById('deleteModal').style.display = 'flex';
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</div>
+</html>

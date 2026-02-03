@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{admin/shared/_layout::layout('Orders', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1">Orders</h1>
+            <p class="v-muted">Manage customer orders and fulfillment.</p>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="v-sep">/</span>
+        <span>Orders</span>
+    </nav>
+
+    <!-- Alerts -->
+    <div class="v-stack" th:if="${error}">
+        <div class="v-alert v-alert--danger">
+            <div class="v-alert__text" th:text="${error}"></div>
+            <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    </div>
+
+    <div class="v-stack" th:if="${success}">
+        <div class="v-alert v-alert--success">
+            <div class="v-alert__text" th:text="${success}"></div>
+            <button type="button" class="v-alert__close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="v-card">
+        <div class="v-card__header">
+            <div>
+                <h2 class="v-card__title">All Orders</h2>
+                <p class="v-card__subtitle" th:text="${orders != null ? #lists.size(orders) + ' total' : '0 total'}">
+                    0 total
+                </p>
+            </div>
+        </div>
+
+        <div class="v-tablewrap">
+            <table class="v-table">
+                <thead>
+                <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th>Customer</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th style="width: 120px;">Status</th>
+                    <th>Date</th>
+                    <th style="width: 200px;" class="v-th-right">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${orders == null or #lists.isEmpty(orders)}">
+                    <td colspan="7" class="v-empty">
+                        <div class="v-empty__title">No orders yet</div>
+                        <div class="v-empty__text">Orders will appear here when customers make purchases.</div>
+                    </td>
+                </tr>
+
+                <tr th:each="o : ${orders}">
+                    <td class="v-mono" th:text="${o.id}">1</td>
+                    <td>
+                        <div class="v-strong" th:text="${o.customerUsername}">customer</div>
+                    </td>
+                    <td th:text="${o.itemCount + ' item(s)'}">1 item(s)</td>
+                    <td class="v-strong" th:text="${'$' + #numbers.formatDecimal(o.totalAmount, 1, 2)}">$0.00</td>
+                    <td>
+                        <span class="v-badge"
+                              th:classappend="${o.status.name() == 'DELIVERED'} ? ' v-badge--ok' :
+                                              (${o.status.name() == 'CANCELLED'} ? ' v-badge--danger' :
+                                              (${o.status.name() == 'SHIPPED'} ? ' v-badge--info' :
+                                              (${o.status.name() == 'PAID'} ? ' v-badge--success' : ' v-badge--muted')))"
+                              th:text="${o.status}">
+                            PENDING
+                        </span>
+                    </td>
+                    <td th:text="${#temporals.format(o.createdAt, 'MMM dd, yyyy')}">Jan 01, 2026</td>
+                    <td class="v-td-right">
+                        <div class="v-btngroup">
+                            <a class="v-btn v-btn--ghost v-btn--sm"
+                               th:href="@{/admin/orders/{id}(id=${o.id})}">View</a>
+                            <a th:href="@{/admin/orders/{id}/status(id=${o.id})}"
+                               class="v-btn v-btn--ghost v-btn--sm">Status</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</html>
+</html>

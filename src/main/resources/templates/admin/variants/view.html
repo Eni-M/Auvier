@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/shared/_layout::layout('View Variant', ~{::div#content}, null, null)}">
+
+<div id="content" class="v-admin" th:object="${variant}">
+
+    <!-- Header -->
+    <div class="v-pagehead">
+        <div>
+            <h1 class="v-h1" th:text="*{sku}">SKU-001</h1>
+            <p class="v-muted" th:text="'Product: ' + ${product.name}">Product Name</p>
+        </div>
+
+        <div class="v-pagehead__actions">
+            <a class="v-btn v-btn--ghost" th:href="@{/admin/products/{id}/variants(id=${product.id})}">Back</a>
+            <a class="v-btn v-btn--primary" th:href="@{/admin/products/variants/{id}/edit(id=*{id})}">Edit</a>
+            <button type="button" class="v-btn v-btn--danger" onclick="openDeleteModal()">Delete</button>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="v-breadcrumb">
+        <a th:href="@{/admin}">Dashboard</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/products}">Products</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/products/{id}/view(id=${product.id})}" th:text="${product.name}">Product</a>
+        <span class="v-sep">/</span>
+        <a th:href="@{/admin/products/{id}/variants(id=${product.id})}">Variants</a>
+        <span class="v-sep">/</span>
+        <span th:text="*{sku}">View</span>
+    </nav>
+
+    <div class="v-stack">
+        <!-- Image and Details Grid -->
+        <div style="display: grid; grid-template-columns: 250px 1fr; gap: 24px;">
+            <!-- Image -->
+            <div class="v-card">
+                <div class="v-card__body" style="padding: 16px;">
+                    <div th:if="*{imageUrl != null and !imageUrl.isEmpty()}"
+                         style="border-radius: 8px; overflow: hidden;">
+                        <img th:src="*{imageUrl}" alt="Variant Image"
+                             style="width: 100%; height: auto; display: block;">
+                    </div>
+                    <div th:unless="*{imageUrl != null and !imageUrl.isEmpty()}"
+                         style="width: 100%; height: 280px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3);">
+                        <i class="bi bi-image" style="font-size: 48px;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="v-card">
+                <div class="v-card__header">
+                    <div>
+                        <h2 class="v-card__title">Variant Details</h2>
+                        <p class="v-card__subtitle">Core information for this variant.</p>
+                    </div>
+                </div>
+
+                <div class="v-card__body">
+                    <div class="v-kv">
+                        <div class="v-kv__label">ID</div>
+                        <div class="v-kv__value v-mono" th:text="*{id}">1</div>
+                    </div>
+                    <div class="v-kv">
+                        <div class="v-kv__label">SKU</div>
+                        <div class="v-kv__value" th:text="*{sku}">SKU-001</div>
+                    </div>
+                    <div class="v-kv">
+                        <div class="v-kv__label">Size</div>
+                        <div class="v-kv__value" th:text="*{size}">M</div>
+                    </div>
+                    <div class="v-kv">
+                        <div class="v-kv__label">Color</div>
+                        <div class="v-kv__value" th:text="*{color}">Black</div>
+                    </div>
+                    <div class="v-kv">
+                        <div class="v-kv__label">Price</div>
+                        <div class="v-kv__value" th:text="'$' + *{price}">$0.00</div>
+                    </div>
+                    <div class="v-kv">
+                        <div class="v-kv__label">Stock</div>
+                        <div class="v-kv__value" th:text="*{stock}">0</div>
+                    </div>
+                    <div class="v-kv">
+                        <div class="v-kv__label">Status</div>
+                        <div class="v-kv__value">
+                            <span class="v-badge" th:classappend="*{active} ? ' v-badge--ok' : ' v-badge--muted'"
+                                  th:text="*{active} ? 'Active' : 'Disabled'">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="v-modal" style="display:none;">
+        <div class="v-modal__content">
+            <h3 class="v-modal__title">Confirm Deletion</h3>
+            <p class="v-muted" style="margin-bottom: 12px;">This action cannot be undone.</p>
+
+            <div class="v-kv" style="margin-bottom: 8px;">
+                <div class="v-kv__label">Variant</div>
+                <div class="v-kv__value v-strong" th:text="*{sku}">SKU</div>
+            </div>
+
+            <div class="v-kv" style="margin-bottom: 16px;">
+                <div class="v-kv__label">ID</div>
+                <div class="v-kv__value v-mono" th:text="*{id}">0</div>
+            </div>
+
+            <div class="v-modal__warning" style="margin-bottom: 20px;">
+                Deleting removes this variant permanently. Orders containing this variant may be affected.
+            </div>
+
+            <div class="v-modal__actions">
+                <button type="button" onclick="closeModal()" class="v-btn v-btn--ghost">Cancel</button>
+                <form th:action="@{/admin/products/variants/{id}/delete(id=*{id})}" method="post" style="display: inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="v-btn v-btn--danger">Delete Variant</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+
+</div>
+</html>

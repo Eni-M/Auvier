@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{store/fragments/_layout :: head(${product.name})}"></head>
+
+<body>
+<div th:replace="~{store/fragments/_layout :: announcement}"></div>
+<header th:replace="~{store/fragments/_layout :: header}"></header>
+
+<main>
+    <!-- Breadcrumb -->
+    <nav class="au-breadcrumb">
+        <div class="au-container">
+            <a th:href="@{/}">Home</a>
+            <span>/</span>
+            <a th:href="@{/shop}">Shop</a>
+            <span>/</span>
+            <span th:text="${product.name}">Product Name</span>
+        </div>
+    </nav>
+
+    <!-- Product Detail -->
+    <section class="au-product-detail">
+        <div class="au-container">
+            <div class="au-product-detail__grid">
+                <!-- Product Images -->
+                <div class="au-product-detail__gallery">
+                    <div class="au-product-detail__main-image">
+                        <img id="mainImage"
+                             th:src="${product.variants != null && !product.variants.isEmpty() && product.variants[0].imageUrl != null} ? ${product.variants[0].imageUrl} : 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&q=80'"
+                             th:alt="${product.name}"
+                             class="au-product-detail__image">
+                    </div>
+                    <div class="au-product-detail__thumbnails" th:if="${product.variants != null && product.variants.size() > 1}">
+                        <button th:each="variant, iterStat : ${product.variants}"
+                                th:if="${variant.imageUrl != null}"
+                                class="au-product-detail__thumb"
+                                th:classappend="${iterStat.first} ? ' active'"
+                                th:data-image="${variant.imageUrl}"
+                                onclick="changeImage(this)">
+                            <img th:src="${variant.imageUrl}" th:alt="${variant.color}">
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="au-product-detail__info">
+                    <p class="au-product-detail__brand">Auvier</p>
+                    <h1 class="au-product-detail__title" th:text="${product.name}">Product Name</h1>
+
+                    <p class="au-product-detail__price"
+                       th:if="${product.variants != null && !product.variants.isEmpty()}"
+                       th:text="${'$' + #numbers.formatDecimal(product.variants[0].price, 1, 2)}">$0.00</p>
+
+                    <p class="au-product-detail__description" th:if="${product.description}" th:text="${product.description}">
+                        Product description goes here.
+                    </p>
+
+                    <!-- Variant Selection -->
+                    <form th:if="${product.variants != null && !product.variants.isEmpty()}" class="au-product-detail__form">
+                        <!-- Color Selection -->
+                        <div class="au-product-detail__option">
+                            <label class="au-product-detail__label">Color</label>
+                            <div class="au-product-detail__colors">
+                                <th:block th:each="variant : ${product.variants}">
+                                    <button type="button"
+                                            class="au-color-btn"
+                                            th:text="${variant.color}"
+                                            th:data-variant-id="${variant.id}"
+                                            th:data-price="${variant.price}"
+                                            th:data-stock="${variant.stock}"
+                                            th:data-image="${variant.imageUrl}"
+                                            onclick="selectVariant(this)">
+                                    </button>
+                                </th:block>
+                            </div>
+                        </div>
+
+                        <!-- Size Selection -->
+                        <div class="au-product-detail__option">
+                            <label class="au-product-detail__label">Size</label>
+                            <div class="au-product-detail__sizes">
+                                <th:block th:each="variant : ${product.variants}">
+                                    <button type="button"
+                                            class="au-size-btn"
+                                            th:classappend="${variant.stock <= 0} ? ' out-of-stock'"
+                                            th:text="${variant.size}"
+                                            th:disabled="${variant.stock <= 0}"
+                                            th:data-variant-id="${variant.id}">
+                                    </button>
+                                </th:block>
+                            </div>
+                            <a href="#" class="au-product-detail__size-guide">Size Guide</a>
+                        </div>
+
+                        <!-- Add to Cart -->
+                        <div class="au-product-detail__actions">
+                            <button type="button" class="au-btn au-btn--primary au-btn--lg au-btn--full" id="addToCartBtn">
+                                Add to Bag
+                            </button>
+                        </div>
+                    </form>
+
+                    <div th:unless="${product.variants != null && !product.variants.isEmpty()}" class="au-product-detail__no-variants">
+                        <p class="au-muted">This product is currently unavailable.</p>
+                    </div>
+
+                    <!-- Product Details Accordion -->
+                    <div class="au-product-detail__accordion">
+                        <details class="au-accordion">
+                            <summary class="au-accordion__header">Product Details</summary>
+                            <div class="au-accordion__content">
+                                <p th:text="${product.description != null} ? ${product.description} : 'No details available.'">Details</p>
+                            </div>
+                        </details>
+                        <details class="au-accordion">
+                            <summary class="au-accordion__header">Shipping & Returns</summary>
+                            <div class="au-accordion__content">
+                                <p>Free shipping on orders over $500. Returns accepted within 30 days of purchase.</p>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="au-section" th:if="${relatedProducts != null && !relatedProducts.isEmpty()}">
+        <div class="au-container">
+            <div class="au-section-header">
+                <h2 class="au-section-header__title">You May Also Like</h2>
+            </div>
+
+            <div class="au-products">
+                <article class="au-product" th:each="related : ${relatedProducts}">
+                    <div class="au-product__media">
+                        <img class="au-product__image"
+                             th:src="${related.variants != null && !related.variants.isEmpty() && related.variants[0].imageUrl != null} ? ${related.variants[0].imageUrl} : 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80'"
+                             th:alt="${related.name}">
+                        <div class="au-product__actions">
+                            <a th:href="@{/shop/product/{slug}(slug=${related.slug})}" class="au-product__action-btn">
+                                View Product
+                            </a>
+                        </div>
+                    </div>
+                    <div class="au-product__info">
+                        <p class="au-product__brand">Auvier</p>
+                        <h3 class="au-product__name">
+                            <a th:href="@{/shop/product/{slug}(slug=${related.slug})}" th:text="${related.name}">Product</a>
+                        </h3>
+                        <p class="au-product__price"
+                           th:if="${related.variants != null && !related.variants.isEmpty()}"
+                           th:text="${'$' + #numbers.formatDecimal(related.variants[0].price, 1, 2)}">$0.00</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{store/fragments/_layout :: footer}"></footer>
+<th:block th:replace="~{store/fragments/_layout :: scripts}"></th:block>
+
+<script th:inline="javascript">
+    const product = {
+        name: /*[[${product.name}]]*/ 'Product',
+        slug: /*[[${product.slug}]]*/ ''
+    };
+
+    let selectedVariant = null;
+
+    function changeImage(btn) {
+        document.querySelectorAll('.au-product-detail__thumb').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('mainImage').src = btn.dataset.image;
+    }
+
+    function selectVariant(btn) {
+        document.querySelectorAll('.au-color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        selectedVariant = {
+            variantId: parseInt(btn.dataset.variantId),
+            price: parseFloat(btn.dataset.price),
+            stock: parseInt(btn.dataset.stock),
+            color: btn.textContent.trim(),
+            imageUrl: btn.dataset.image
+        };
+
+        if (btn.dataset.image) {
+            document.getElementById('mainImage').src = btn.dataset.image;
+        }
+        if (btn.dataset.price) {
+            document.querySelector('.au-product-detail__price').textContent = '$' + parseFloat(btn.dataset.price).toFixed(2);
+        }
+    }
+
+    function selectSize(btn) {
+        document.querySelectorAll('.au-size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (selectedVariant) {
+            selectedVariant.size = btn.textContent.trim();
+            selectedVariant.variantId = parseInt(btn.dataset.variantId);
+        }
+    }
+
+    function addToCart() {
+        if (!selectedVariant) {
+            alert('Please select a size and color');
+            return;
+        }
+
+        const cart = JSON.parse(localStorage.getItem('auvier_cart') || '[]');
+
+        const existingIndex = cart.findIndex(item => item.variantId === selectedVariant.variantId);
+
+        if (existingIndex > -1) {
+            cart[existingIndex].quantity += 1;
+        } else {
+            cart.push({
+                variantId: selectedVariant.variantId,
+                productName: product.name,
+                size: selectedVariant.size || 'One Size',
+                color: selectedVariant.color,
+                price: selectedVariant.price,
+                quantity: 1,
+                imageUrl: selectedVariant.imageUrl
+            });
+        }
+
+        localStorage.setItem('auvier_cart', JSON.stringify(cart));
+
+        // Show confirmation
+        const btn = document.getElementById('addToCartBtn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Added to Bag!';
+        btn.disabled = true;
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }, 1500);
+
+        // Update cart count in header (use global function from public.js)
+        if (typeof window.updateCartCount === 'function') {
+            window.updateCartCount();
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        const firstColor = document.querySelector('.au-color-btn');
+        const firstSize = document.querySelector('.au-size-btn:not(.out-of-stock)');
+
+        if (firstColor) {
+            firstColor.classList.add('active');
+            selectVariant(firstColor);
+        }
+        if (firstSize) {
+            firstSize.classList.add('active');
+            selectSize(firstSize);
+        }
+
+        // Attach event listeners
+        document.querySelectorAll('.au-size-btn').forEach(btn => {
+            btn.addEventListener('click', () => selectSize(btn));
+        });
+
+        document.getElementById('addToCartBtn')?.addEventListener('click', addToCart);
+    });
+</script>
+</body>
+</html>

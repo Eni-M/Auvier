@@ -1,75 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{shared/_layout::layout('Bad Request', ~{::div#content}, '/assets/css/admin.css', null)}">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Bad Request</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bad Request | AUVIER</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --au-black: #0a0a0a; --au-white: #ffffff; --au-gray: #999999; --au-gray-light: #e8e8e8; --au-warning: #dd6b20; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Montserrat', sans-serif; background: var(--au-white); color: var(--au-black); min-height: 100vh; display: flex; flex-direction: column; }
+        .error-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--au-gray-light); }
+        .error-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--au-black); text-decoration: none; }
+        .error-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem; }
+        .error-container { text-align: center; max-width: 500px; }
+        .error-icon { font-size: 4rem; color: var(--au-warning); margin-bottom: 1.5rem; }
+        .error-status { font-family: 'Cormorant Garamond', serif; font-size: 6rem; font-weight: 300; color: var(--au-black); line-height: 1; margin-bottom: 0.5rem; }
+        .error-title { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 400; margin-bottom: 1rem; }
+        .error-message { color: var(--au-gray); line-height: 1.6; margin-bottom: 1.5rem; }
+        .error-trace { background: #f5f5f5; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 2rem; font-size: 0.8125rem; }
+        .error-trace-label { color: var(--au-gray); margin-right: 0.5rem; }
+        .error-trace-id { font-family: 'Menlo', 'Monaco', monospace; color: var(--au-black); font-weight: 500; letter-spacing: 0.05em; }
+        .error-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .error-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.75rem; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--au-black); transition: all 0.2s ease; cursor: pointer; font-family: inherit; }
+        .error-btn--primary { background: var(--au-black); color: var(--au-white); }
+        .error-btn--primary:hover { background: #333; }
+        .error-btn--secondary { background: transparent; color: var(--au-black); }
+        .error-btn--secondary:hover { background: var(--au-black); color: var(--au-white); }
+        .error-footer { padding: 1.5rem 2rem; text-align: center; font-size: 0.8125rem; color: var(--au-gray); border-top: 1px solid var(--au-gray-light); }
+    </style>
 </head>
 <body>
-<div id="content">
-    <div class="error-container">
-        <div class="error-icon">
-            <i class="bi bi-exclamation-triangle"></i>
-        </div>
-        <div class="error-status" th:text="${status}">400</div>
-        <div class="error-title" th:text="${error}">Bad Request</div>
-        <div class="error-message" th:text="${message}">The request could not be understood.</div>
-        <div class="error-trace" th:if="${traceId}">
-            <span>Trace ID: </span><code th:text="${traceId}"></code>
-        </div>
-        <div class="error-actions">
-            <a th:href="@{/admin}" class="v-btn v-btn--primary"><i class="bi bi-house"></i> Dashboard</a>
-            <a href="javascript:history.back()" class="v-btn v-btn--ghost"><i class="bi bi-arrow-left"></i> Go Back</a>
-        </div>
-    </div>
+    <header class="error-header">
+        <a th:href="@{/}" class="error-logo">Auvier</a>
+    </header>
 
-    <style>
-        .error-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 60vh;
-            text-align: center;
-            padding: 2rem;
-        }
-        .error-icon {
-            font-size: 4rem;
-            color: #ffc107;
-            margin-bottom: 1rem;
-        }
-        .error-status {
-            font-size: 5rem;
-            font-weight: bold;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 0.5rem;
-        }
-        .error-title {
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 1rem;
-        }
-        .error-message {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 1.5rem;
-            max-width: 500px;
-        }
-        .error-trace {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 2rem;
-        }
-        .error-trace code {
-            background: rgba(255,255,255,0.1);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-        .error-actions {
-            display: flex;
-            gap: 12px;
-        }
-    </style>
-</div>
+    <main class="error-main">
+        <div class="error-container">
+            <div class="error-icon"><i class="bi bi-exclamation-triangle"></i></div>
+            <div class="error-status">400</div>
+            <h1 class="error-title">Bad Request</h1>
+            <p class="error-message">
+                We couldn't process your request. Please check your input and try again.
+            </p>
+            <div class="error-trace" th:if="${traceId != null}">
+                <span class="error-trace-label">Reference ID:</span>
+                <span class="error-trace-id" th:text="${traceId}">abc12345</span>
+            </div>
+            <div class="error-actions">
+                <a th:href="@{/}" class="error-btn error-btn--primary">
+                    <i class="bi bi-house"></i> Back to Home
+                </a>
+                <button onclick="history.back()" class="error-btn error-btn--secondary">
+                    <i class="bi bi-arrow-left"></i> Go Back
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="error-footer">
+        &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2026</span> Auvier. All rights reserved.
+    </footer>
 </body>
 </html>
 
